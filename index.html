@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MV Hondius Andes Hantavirus 事件追踪</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Incident dashboard</p>
+        <h1>MV Hondius Andes Hantavirus 事件追踪</h1>
+        <p class="dek">
+          面向新闻核验、时间线整理、风险信号判断和后续观察窗口管理的中文看板。
+        </p>
+      </div>
+      <div class="asof">
+        <span>截至</span>
+        <strong id="asOf">2026-05-09</strong>
+        <span id="dataVersion">data version</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="summary-band" aria-labelledby="summary-title">
+        <div>
+          <h2 id="summary-title">当前结论</h2>
+          <p id="posture"></p>
+        </div>
+        <ul id="summaryList" class="summary-list"></ul>
+      </section>
+
+      <section class="metric-grid" id="metricGrid" aria-label="关键指标"></section>
+
+      <section class="panel snapshot-panel" aria-labelledby="snapshots-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Source snapshots</p>
+            <h2 id="snapshots-title">官方口径快照</h2>
+          </div>
+          <span class="source-pill">并列展示，不强行合并</span>
+        </div>
+        <div id="sourceSnapshots" class="snapshot-grid"></div>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel chart-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Case status</p>
+              <h2>病例分类</h2>
+            </div>
+            <span class="source-pill">ECDC / WHO</span>
+          </div>
+          <div class="chart-layout">
+            <div id="donut" class="donut" aria-label="病例分类环形图"></div>
+            <div id="caseBars" class="bars"></div>
+          </div>
+          <p class="caption">
+            死亡数与病例分类不是互斥分类，图中死亡单独作为严重程度指标展示。
+          </p>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Risk ratings</p>
+              <h2>官方风险口径</h2>
+            </div>
+          </div>
+          <div id="riskRatings" class="risk-list"></div>
+        </article>
+      </section>
+
+      <section class="panel route-panel" aria-labelledby="route-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Route context</p>
+            <h2 id="route-title">行程与监测锚点</h2>
+          </div>
+        </div>
+        <div id="routeStrip" class="route-strip"></div>
+        <div id="monitoringWindows" class="window-grid"></div>
+      </section>
+
+      <section class="panel timeline-panel" aria-labelledby="timeline-title">
+        <div class="panel-head timeline-head">
+          <div>
+            <p class="eyebrow">Timeline</p>
+            <h2 id="timeline-title">时间线</h2>
+          </div>
+          <div class="filters" id="filters" aria-label="时间线筛选"></div>
+        </div>
+        <div class="time-scale" id="timeScale" aria-label="事件时间尺度"></div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="signals-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Signals</p>
+            <h2 id="signals-title">红绿信号</h2>
+          </div>
+          <span class="source-pill">看关系链，不只看数字</span>
+        </div>
+        <div id="signals" class="signal-grid"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="protocol-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">News workflow</p>
+            <h2 id="protocol-title">关注节奏</h2>
+          </div>
+        </div>
+        <div id="updateProtocol" class="protocol-grid"></div>
+      </section>
+
+      <section class="panel sources-panel" aria-labelledby="sources-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Sources</p>
+            <h2 id="sources-title">信息源与数据文件</h2>
+          </div>
+          <div class="source-actions">
+            <a href="./data/events.csv">events.csv</a>
+            <a href="./data/sources.csv">sources.csv</a>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>优先级</th>
+                <th>来源</th>
+                <th>日期</th>
+                <th>用途</th>
+                <th>链接</th>
+              </tr>
+            </thead>
+            <tbody id="sourceRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data/incident-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

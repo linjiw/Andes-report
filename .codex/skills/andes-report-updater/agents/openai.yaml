@@ -1,0 +1,4 @@
+interface:
+  display_name: "Andes Report Updater"
+  short_description: "Update the Andes hantavirus tracker from official sources."
+  default_prompt: "Check official sources, organize changes, and update the Andes report website with source-traceable facts."

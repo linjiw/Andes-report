@@ -1,0 +1,9 @@
+{
+  "name": "andes-report",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check-news": "node scripts/check-news.mjs"
+  }
+}

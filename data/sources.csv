@@ -1,0 +1,11 @@
+priority,org,date,name,url,use_for
+1,WHO,2026-05-08,"WHO Disease Outbreak News: Hantavirus cluster linked to cruise ship travel","https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600","最新 WHO 一手口径：8 例、6 确诊、2 可能、3 死亡、全球风险低、船上风险中等、船上传播证据"
+1,WHO,2026-05-04,"WHO Disease Outbreak News: initial cruise ship cluster report","https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON599","初始病例、路线、临床表现、风险评估、45 天监测建议"
+1,WHO,2026-05-07,"WHO response to hantavirus cases linked to a cruise ship","https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship","最新 WHO 口径：8 例、5 确诊、3 死亡、Andes virus、低风险"
+1,ECDC,2026-05-08,"Andes Hantavirus outbreak in cruise ship, May 2026","https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak","每日更新病例分类、死亡数、欧洲风险评估、预计抵达 Tenerife 日期"
+1,ECDC,2026-05-05,"Hantavirus-associated cluster of illness on a cruise ship: ECDC assessment and recommendations","https://www.ecdc.europa.eu/en/publications-data/hantavirus-associated-cluster-illness-cruise-ship-ecdc-assessment-and","传播方式、接触者管理、欧洲公共卫生建议"
+1,CDC,2026-05-08,"Hantavirus: Current Situation","https://www.cdc.gov/hantavirus/situation-summary/index.html","美国公众和旅行者风险、美国是否报告相关病例、传播与症状口径"
+1,CDC,2026-05-07,"Statement on the M/V Hondius Cruise Ship","https://www.cdc.gov/media/releases/2026-hantavirus-confirmed-cruise-ship.html","美国早期声明、美国旅客指引、跨机构协调"
+1,CDC,2026-04-18,"About Andes Virus","https://www.cdc.gov/hantavirus/about/andesvirus.html","Andes virus 症状、4-42 天窗口、有限人传人背景"
+2,AP,2026-05-08,"Spanish authorities prepare for hantavirus cruise ship arrival","https://apnews.com/article/e5b35d12be9dc30213d7a2b8b4955a88","行动进展、船舶抵达和疏散安排；不作为医学风险主口径"
+2,Reuters,2026-05-08,"Singapore tests two residents for hantavirus after cruise outbreak","https://www.reuters.com/business/healthcare-pharmaceuticals/singapore-tests-two-residents-hantavirus-after-cruise-outbreak-2026-05-08/","各国接触者追踪和检测行动进展；不作为医学风险主口径"
