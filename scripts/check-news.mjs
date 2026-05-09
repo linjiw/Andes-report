@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, unlink, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
+const SNAPSHOT_RETENTION = 50;
 
 const sourceConfigs = [
   {
@@ -436,7 +437,10 @@ async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, pub
     fetchErrors: countFetchErrors(snapshot),
     parserBlanks: countParserBlanks(snapshot)
   };
-  const snapshots = [nextEntry, ...index.snapshots.filter((item) => item.path !== relativeSnapshotPath)].slice(0, 50);
+  const snapshots = [nextEntry, ...index.snapshots.filter((item) => item.path !== relativeSnapshotPath)].slice(
+    0,
+    SNAPSHOT_RETENTION
+  );
   const updatedAt = publishable ? snapshot.checkedAt : index.updatedAt ?? null;
   await writeJson(join(repoRoot, "data/source-snapshots/index.json"), {
     schemaVersion: 1,
@@ -450,6 +454,35 @@ async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, pub
     lastCheckedAt: snapshot.checkedAt,
     snapshots
   });
+  await pruneSnapshotArtifacts(snapshots);
+}
+
+async function pruneSnapshotArtifacts(snapshots) {
+  const snapshotDir = join(repoRoot, "data/source-snapshots");
+  const draftDir = join(repoRoot, "data/update-drafts");
+  const keepSnapshots = new Set(snapshots.map((item) => item.path?.split("/").pop()).filter(Boolean));
+  const keepDrafts = new Set(snapshots.map((item) => item.draftPath?.split("/").pop()).filter(Boolean));
+
+  try {
+    const files = await readdir(snapshotDir);
+    await Promise.all(
+      files
+        .filter((file) => file.endsWith(".json"))
+        .filter((file) => file !== "index.json" && file !== "latest.json")
+        .filter((file) => !keepSnapshots.has(file))
+        .map((file) => unlink(join(snapshotDir, file)))
+    );
+  } catch {}
+
+  try {
+    const files = await readdir(draftDir);
+    await Promise.all(
+      files
+        .filter((file) => file.endsWith(".md"))
+        .filter((file) => !keepDrafts.has(file))
+        .map((file) => unlink(join(draftDir, file)))
+    );
+  } catch {}
 }
 
 function printText(snapshot) {

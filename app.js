@@ -1,4 +1,5 @@
 const data = window.INCIDENT_DATA;
+const latestSnapshot = window.LATEST_SOURCE_SNAPSHOT ?? null;
 
 const typeLabels = {
   all: "全部",
@@ -43,6 +44,93 @@ function sourceDateLabel(ids) {
     .map((source) => `${source.org} ${source.date}`)
     .filter((label, index, arr) => arr.indexOf(label) === index)
     .join(" / ");
+}
+
+function findSnapshotByPrimarySourceId(sourceId) {
+  return data.sourceSnapshots.find((item) => item.sourceIds?.[0] === sourceId);
+}
+
+function latestResultsById() {
+  return new Map((latestSnapshot?.results ?? []).map((result) => [result.id, result]));
+}
+
+function countsMatch(dataSnapshot, parsed) {
+  if (!dataSnapshot || !parsed) return false;
+  return (
+    dataSnapshot.total === (parsed.totalCases ?? null) &&
+    dataSnapshot.confirmed === (parsed.confirmed ?? null) &&
+    dataSnapshot.probable === (parsed.probable ?? null) &&
+    dataSnapshot.suspected === (parsed.suspected ?? null) &&
+    dataSnapshot.deaths === (parsed.deaths ?? null)
+  );
+}
+
+function dashboardSyncStatus() {
+  if (!latestSnapshot?.checkedAt) {
+    return {
+      aligned: false,
+      checkedAt: null,
+      publishable: false,
+      humanReviewRequired: true
+    };
+  }
+
+  const byId = latestResultsById();
+  const whoResult = byId.get("who-don");
+  const ecdcResult = byId.get("ecdc-daily");
+  const cdcResult = byId.get("cdc-current");
+  const whoSnapshot = findSnapshotByPrimarySourceId("who-don");
+  const ecdcSnapshot = findSnapshotByPrimarySourceId("ecdc-daily");
+  const cdcSnapshot = findSnapshotByPrimarySourceId("cdc-current");
+
+  const whoAligned = countsMatch(whoSnapshot, whoResult?.parsed);
+  const ecdcAligned = countsMatch(ecdcSnapshot, ecdcResult?.parsed);
+  const cdcAligned =
+    Boolean(cdcSnapshot) &&
+    (!cdcResult?.parsed?.riskExtremelyLow || /extremely low/i.test(cdcSnapshot.publicRisk ?? ""));
+
+  return {
+    aligned: Boolean(whoAligned && ecdcAligned && cdcAligned),
+    checkedAt: latestSnapshot.checkedAt,
+    publishable: (latestSnapshot.signals?.warnings?.length ?? 0) === 0,
+    humanReviewRequired: Boolean(latestSnapshot.signals?.humanReviewRequired)
+  };
+}
+
+function renderAutomationStatus() {
+  const pill = document.querySelector("#automationPill");
+  const summary = document.querySelector("#automationSummary");
+  const detail = document.querySelector("#automationDetail");
+  const status = dashboardSyncStatus();
+
+  if (!status.checkedAt) {
+    pill.textContent = "状态未知";
+    summary.textContent = "当前页面未加载到最近一次官方检查快照。";
+    detail.textContent = "请先查看 Update history 页面，确认公开快照文件是否存在。";
+    return;
+  }
+
+  const checkedAtLabel = new Intl.DateTimeFormat("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(new Date(status.checkedAt));
+
+  if (status.aligned) {
+    pill.textContent = status.humanReviewRequired ? "已同步，仍需人工复核" : "已同步";
+    summary.textContent = `最近一次成功官方检查时间：${checkedAtLabel}。当前首页的结构化快照与最近一次公开检查结果对齐。`;
+    detail.textContent = status.humanReviewRequired
+      ? "这表示数字和基础风险口径已对齐；若官方传播评估、旅行建议或医学措辞发生变化，仍应按人工复核流程更新说明文字。"
+      : "这表示首页当前展示的结构化快照与最近一次公开检查结果一致。";
+    return;
+  }
+
+  pill.textContent = status.publishable ? "最新检查未完全同步到首页" : "仅有审计快照";
+  summary.textContent = `最近一次官方检查时间：${checkedAtLabel}。当前首页整理版可能落后于最新公开检查结果，请优先查看 Update history 和官方口径快照。`;
+  detail.textContent = status.publishable
+    ? "这通常表示自动检查已拿到新官方结果，但 curated dashboard 仍需补充结构化数据或中文说明。"
+    : "这通常表示最近一次运行存在抓取或解析失败，所以只保留了审计记录，没有替换当前公开快照。";
 }
 
 function renderSummary() {
@@ -301,6 +389,7 @@ function renderSources() {
 }
 
 function init() {
+  renderAutomationStatus();
   renderSummary();
   renderMetrics();
   renderCaseChart();

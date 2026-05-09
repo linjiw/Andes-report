@@ -30,6 +30,8 @@ In the scheduled GitHub automation path, commit and push validated generated sna
 
 Only let a successful, publishable official-source check replace `data/source-snapshots/latest.*`. Keep failed fetch/parser runs as timestamped audit artifacts without pushing them into the public latest snapshot.
 
+Make sure the homepage exposes whether the curated dashboard is aligned with the latest successful official check. If only snapshots/history were refreshed, label that honestly instead of implying the narrative was fully auto-updated.
+
 ## Source Policy
 
 Use source priority:

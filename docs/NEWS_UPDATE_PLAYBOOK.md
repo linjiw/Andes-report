@@ -33,6 +33,7 @@ Important:
 - `draft-update` is an audit step, not a substitute for updating `data/incident-data.js`.
 - Only publish a new `data/source-snapshots/latest.*` snapshot to the webpage when the run fetched and parsed official sources successfully.
 - The scheduled automation should commit and push generated snapshot/draft changes after validation so GitHub Pages redeploys the latest public status.
+- The homepage should show whether the curated dashboard is already aligned with the latest successful official check; do not imply a fully synchronized narrative when only snapshot/history files were refreshed.
 
 Primary source order:
 

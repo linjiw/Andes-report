@@ -17,8 +17,10 @@ Expected behavior:
 5. Treat those data-file edits as the webpage update: `index.html`, `sources.html`, and other dashboard pages read the tracked data directly, so no separate HTML copy pass is required unless layout text itself changes.
 6. Preserve source disagreements instead of flattening them, but remove stale disagreement language when WHO and ECDC later realign.
 7. Keep failed fetch/parser runs as timestamped audit artifacts only; do not overwrite `data/source-snapshots/latest.*` on the public webpage unless the check is publishable.
-8. Scheduled GitHub automation should commit and push validated generated status files so GitHub Pages redeploys the latest check state automatically.
-9. Report changed files and validation output.
+8. The homepage should expose the latest successful official-check status separately from the curated dashboard narrative, so readers can tell when the raw check is newer than the manually curated interpretation.
+9. Scheduled GitHub automation should commit and push validated generated status files so GitHub Pages redeploys the latest check state automatically.
+10. Prune old timestamped snapshot/draft artifacts from the working tree so the repo does not grow without bound.
+11. Report changed files and validation output.
 
 ## CI Split
 
