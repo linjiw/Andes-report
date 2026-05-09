@@ -7,6 +7,7 @@
     "check-news": "node scripts/check-news.mjs check",
     "snapshot-news": "node scripts/check-news.mjs snapshot",
     "draft-update": "node scripts/check-news.mjs update-draft",
-    "validate": "node --check app.js && node --check data/incident-data.js && node --check scripts/check-news.mjs && node scripts/validate-data.mjs && npm run check-news"
+    "validate": "node --check app.js && node --check data/incident-data.js && node --check scripts/check-news.mjs && node --check scripts/validate-data.mjs && node scripts/validate-data.mjs",
+    "validate-with-news": "npm run validate && npm run check-news"
   }
 }

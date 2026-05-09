@@ -1,13 +1,12 @@
-name: Validate
+name: News Check
 
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
 
 jobs:
-  validate:
+  news-check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -19,5 +18,8 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Validate static site data
+      - name: Validate static data
         run: npm run validate
+
+      - name: Check official sources
+        run: npm run check-news

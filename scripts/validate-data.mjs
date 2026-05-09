@@ -15,7 +15,8 @@ assert(Array.isArray(data.sources), "sources must be an array");
 assert(Array.isArray(data.events), "events must be an array");
 assert(Array.isArray(data.sourceSnapshots), "sourceSnapshots must be an array");
 
-const sourceIds = new Set(data.sources.map((source) => source.id));
+const sourceMap = new Map(data.sources.map((source) => [source.id, source]));
+const sourceIds = new Set(sourceMap.keys());
 
 function checkIds(ids = [], path) {
   for (const id of ids) {
@@ -40,6 +41,27 @@ const whoSnapshot = data.sourceSnapshots.find((snapshot) => snapshot.source.incl
 const ecdcSnapshot = data.sourceSnapshots.find((snapshot) => snapshot.source.includes("ECDC"));
 assert(whoSnapshot, "WHO source snapshot is required");
 assert(ecdcSnapshot, "ECDC source snapshot is required");
+
+const sourceOrgAliases = [
+  ["WHO", "WHO"],
+  ["ECDC", "ECDC"],
+  ["CDC", "CDC"],
+  ["Reuters", "Reuters"],
+  ["AP", "AP"]
+];
+
+for (const [index, snapshot] of data.sourceSnapshots.entries()) {
+  const primaryId = snapshot.sourceIds?.[0];
+  const primarySource = sourceMap.get(primaryId);
+  assert(primarySource, `sourceSnapshots[${index}] missing primary source`);
+  const expectedOrg = sourceOrgAliases.find(([label]) => snapshot.source.includes(label))?.[1];
+  if (expectedOrg && primarySource) {
+    assert(
+      primarySource.org === expectedOrg,
+      `sourceSnapshots[${index}] source "${snapshot.source}" points to ${primaryId} (${primarySource.org}), expected ${expectedOrg}`
+    );
+  }
+}
 
 if (whoSnapshot && ecdcSnapshot && whoSnapshot.confirmed !== ecdcSnapshot.confirmed) {
   assert(

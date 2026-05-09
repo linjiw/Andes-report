@@ -23,6 +23,8 @@ Maintain this repo as a source-traceable, signal-driven public health tracker fo
 npm run validate
 ```
 
+Run `npm run validate-with-news` before changing source-driven facts or risk language.
+
 ## Source Policy
 
 Use source priority:

@@ -18,6 +18,12 @@ Expected behavior:
 6. Keep changes local and source-traceable unless the user explicitly asks for a publish/push step.
 7. Report changed files and validation output.
 
+## CI Split
+
+`Validate` is intentionally offline for push and pull request events. It checks syntax and local data integrity without hitting WHO/CDC/ECDC on every code change.
+
+`News Check` is the live network workflow. It runs on the 6-hour schedule and can also be triggered manually.
+
 The automation should use:
 
 - [docs/NEWS_UPDATE_PLAYBOOK.md](/Users/linji/projects/Andes-report/docs/NEWS_UPDATE_PLAYBOOK.md)

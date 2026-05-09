@@ -39,7 +39,7 @@ window.INCIDENT_DATA = {
     {
       label: "船上风险",
       value: "中等",
-      detail: "WHO 对乘客和船员的事件相关风险",
+      detail: "WHO: 船上乘客/船员；全球公众为低",
       tone: "amber",
       sourceIds: ["who-don"]
     },
@@ -164,7 +164,7 @@ window.INCIDENT_DATA = {
       place: "Ushuaia, Argentina",
       detail:
         "WHO DON 写明该船搭载 147 人，行程涉及南大西洋、南极相关区域、南乔治亚、Tristan da Cunha、Saint Helena 等。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-04-06",
@@ -173,7 +173,7 @@ window.INCIDENT_DATA = {
       place: "On board",
       detail:
         "病例发病时间区间从 4 月 6 日持续到 4 月 28 日；早期表现包括发热、胃肠道症状，部分进展为肺炎、ARDS 和休克。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-04-11",
@@ -182,7 +182,7 @@ window.INCIDENT_DATA = {
       place: "On board",
       detail:
         "WHO DON 记录第一名出现症状的乘客约 5 天后死亡；早期诊断未立即锁定 Andes virus。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-04-24",
@@ -191,7 +191,7 @@ window.INCIDENT_DATA = {
       place: "Saint Helena",
       detail:
         "WHO DON 描述船舶抵达 Saint Helena 后进行了遗体下船、医疗评估、实验室样本安排和接触者追踪等处置。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-04-25",
@@ -200,7 +200,7 @@ window.INCIDENT_DATA = {
       place: "Johannesburg route",
       detail:
         "WHO DON 记录该病例在转运途中病情恶化，随后在南非接受检测并确认汉坦病毒感染。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-04-26",
@@ -209,7 +209,7 @@ window.INCIDENT_DATA = {
       place: "South Africa / on board",
       detail:
         "WHO DON 记录第二名病例死亡；病例簇仍在已知船舶和旅行接触范围内被识别。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-04-28",
@@ -218,7 +218,7 @@ window.INCIDENT_DATA = {
       place: "On board",
       detail:
         "WHO DON 将本次病例发病时间列为 4 月 6 日至 4 月 28 日，支持后续仍需等待潜伏期内病例显形。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04", "who-don"]
     },
     {
       date: "2026-05-02",
@@ -227,7 +227,7 @@ window.INCIDENT_DATA = {
       place: "International reporting",
       detail:
         "WHO DON 写明 5 月 2 日收到本次多国邮轮相关汉坦病毒聚集事件通报。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04"]
     },
     {
       date: "2026-05-04",
@@ -236,7 +236,7 @@ window.INCIDENT_DATA = {
       place: "WHO",
       detail:
         "WHO 初始通报描述病例、路线、临床表现、调查方向和公共卫生建议；风险评估为低。",
-      sourceIds: ["who-don"]
+      sourceIds: ["who-don-2026-05-04"]
     },
     {
       date: "2026-05-07",
@@ -282,6 +282,15 @@ window.INCIDENT_DATA = {
       detail:
         "ECDC 写明 8 例中 5 确诊、2 可能、1 疑似、3 死亡；EU/EEA 普通人群风险非常低。",
       sourceIds: ["ecdc-daily"]
+    },
+    {
+      date: "2026-05-08",
+      type: "response",
+      title: "AP/Reuters 报道各国接收、疏散和检测行动进展",
+      place: "Spain / Singapore / international",
+      detail:
+        "AP 用于跟踪西班牙接收和疏散安排，Reuters 用于跟踪新加坡相关检测和隔离动作；这类媒体源只作为行动进展补充，不覆盖官方病例和风险口径。",
+      sourceIds: ["ap-may8", "reuters-may8"]
     },
     {
       date: "2026-05-10",

@@ -88,10 +88,16 @@ Avoid:
 
 ## 5. Validate
 
-Before committing:
+Before committing or opening a PR, run the offline validator:
 
 ```bash
 npm run validate
+```
+
+Before changing source-driven facts or risk language, run the live official-source check:
+
+```bash
+npm run validate-with-news
 ```
 
 For visual changes, serve locally and inspect:

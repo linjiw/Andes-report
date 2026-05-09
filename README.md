@@ -43,6 +43,12 @@ npm run draft-update
 npm run validate
 ```
 
+完整验证并实时检查官方来源：
+
+```bash
+npm run validate-with-news
+```
+
 ## 当前口径
 
 截至 2026-05-09，本版采用的核心口径是并列官方快照：

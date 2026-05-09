@@ -143,7 +143,10 @@ function parseWhoResponse(text) {
     ]),
     deaths: matchNumber(text, [/(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+deaths/i]),
     mentionsAndes: /Andes virus/i.test(text),
-    riskLow: /risk .* low|low public health risk|risk assessment.*low/i.test(text)
+    riskLow:
+      /WHO assesses the public health risk as low/i.test(text) ||
+      /low public health risk/i.test(text) ||
+      /risk assessment[^.]*low/i.test(text)
   };
 }
 
@@ -165,8 +168,14 @@ function parseWhoDon(text) {
       /including\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+deaths/i,
       /Number of deaths\s+(\d+)/i
     ]),
-    mentionsRiskLow: /Global level as low|global population .* low|risk .* global population .* low/i.test(text),
-    shipRiskModerate: /ship is considered moderate|cruise ship as moderate|risk .* ship .* moderate/i.test(text),
+    mentionsRiskLow:
+      /risk is assessed at the Global level as low/i.test(text) ||
+      /global population[^.]*low/i.test(text) ||
+      /risk[^.]*global population[^.]*low/i.test(text),
+    shipRiskModerate:
+      /risk for passengers and crew[^.]*moderate/i.test(text) ||
+      /ship is considered moderate/i.test(text) ||
+      /cruise ship[^.]*moderate/i.test(text),
     mentions147: /147/i.test(text),
     evidenceHumanToHuman: /Current evidence points to subsequent human-to-human transmission onboard/i.test(text)
   };
@@ -186,11 +195,20 @@ function parseCdc(text) {
 function compareToBaseline(parsed, baseline = {}) {
   const changes = [];
   for (const [key, expected] of Object.entries(baseline)) {
-    if (parsed[key] !== null && parsed[key] !== undefined && parsed[key] !== expected) {
+    if (parsed[key] === null || parsed[key] === undefined) {
+      changes.push({
+        key,
+        expected,
+        observed: parsed[key] ?? null,
+        type: "parser-blank",
+        message: `${key}: baseline ${expected}, parser returned blank`
+      });
+    } else if (parsed[key] !== expected) {
       changes.push({
         key,
         expected,
         observed: parsed[key],
+        type: "baseline-change",
         message: `${key}: baseline ${expected}, page ${parsed[key]}`
       });
     }

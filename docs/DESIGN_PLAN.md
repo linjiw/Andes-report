@@ -194,6 +194,13 @@ Phase 2:
 - Map and timeline pages.
 - Public methodology page.
 
+Phase 3:
+
+- Multi-pathogen support.
+- API and data downloads.
+- PWA.
+- Expert review workflow.
+
 ## Implementation Progress
 
 Completed by 2026-05-09:
@@ -202,25 +209,19 @@ Completed by 2026-05-09:
 - WHO DON600 / ECDC / CDC source snapshots displayed side by side.
 - `npm run check-news`, `npm run snapshot-news`, and `npm run draft-update`.
 - Data integrity validator and GitHub Actions workflow.
+- Split offline CI validation from scheduled live news checks.
 - Repo-local update skill and two active Codex app automations.
-- Private GitHub repository on `main`.
+- Public GitHub repository on `main`.
+- GitHub Pages deployment.
 
 Not complete yet:
 
-- Production deployment.
 - RSS feed.
 - Email subscriptions.
 - Backend database and CMS.
 - Map visualization.
 - Article/explainer content workflow.
 - Multi-pathogen data model.
-
-Phase 3:
-
-- Multi-pathogen support.
-- API and data downloads.
-- PWA.
-- Expert review workflow.
 
 ## Legal And Safety Notes
 
