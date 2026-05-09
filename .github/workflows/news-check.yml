@@ -1,9 +1,12 @@
-name: News Check
+name: News Check And Publish
 
 on:
   workflow_dispatch:
   schedule:
     - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
 
 jobs:
   news-check:
@@ -12,14 +15,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "24"
 
-      - name: Validate static data
-        run: npm run validate
+      - name: Update organized news artifacts
+        run: npm run update-news
 
-      - name: Check official sources
-        run: npm run check-news
+      - name: Commit and push news refresh
+        run: |
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          RUN_AT=$(node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('data/source-snapshots/index.json','utf8'));process.stdout.write(j.lastCheckedAt||j.updatedAt||new Date().toISOString())")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/source-snapshots data/update-drafts
+          if git diff --cached --quiet; then
+            echo "Generated files did not change."
+            exit 0
+          fi
+          git commit -m "Automated news refresh ${RUN_AT}"
+          git push origin HEAD:${GITHUB_REF_NAME}

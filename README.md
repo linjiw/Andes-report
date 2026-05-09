@@ -37,6 +37,12 @@ npm run snapshot-news
 npm run draft-update
 ```
 
+For the scheduled end-to-end refresh path that saves organized artifacts and validates before publish:
+
+```bash
+npm run update-news
+```
+
 完整验证：
 
 ```bash

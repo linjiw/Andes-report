@@ -30,9 +30,9 @@ const sourceConfigs = [
     parser: parseEcdc,
     baseline: {
       totalCases: 8,
-      confirmed: 5,
+      confirmed: 6,
       probable: 2,
-      suspected: 1,
+      suspected: 0,
       deaths: 3
     }
   },
@@ -310,14 +310,30 @@ async function writeJsData(path, globalName, value) {
   await writeFile(path, `window.${globalName} = ${JSON.stringify(value, null, 2)};\n`);
 }
 
-async function saveSnapshot(snapshot) {
+function countFetchErrors(snapshot) {
+  return snapshot.results.filter((result) => !result.ok).length;
+}
+
+function countParserBlanks(snapshot) {
+  return snapshot.signals.warnings.filter((warning) => warning.type === "parser-blank").length;
+}
+
+function isPublishableSnapshot(snapshot) {
+  return countFetchErrors(snapshot) === 0 && countParserBlanks(snapshot) === 0;
+}
+
+async function saveTimestampedSnapshot(snapshot) {
   const fileName = `${slugTimestamp(snapshot.checkedAt)}.json`;
   const snapshotPath = join(repoRoot, "data/source-snapshots", fileName);
-  const latestPath = join(repoRoot, "data/source-snapshots/latest.json");
   await writeJson(snapshotPath, snapshot);
+  return snapshotPath;
+}
+
+async function publishLatestSnapshot(snapshot) {
+  const latestPath = join(repoRoot, "data/source-snapshots/latest.json");
   await writeJson(latestPath, snapshot);
   await writeJsData(join(repoRoot, "data/source-snapshots/latest.js"), "LATEST_SOURCE_SNAPSHOT", snapshot);
-  return { snapshotPath, latestPath };
+  return latestPath;
 }
 
 function formatHumanReviewReason(snapshot) {
@@ -328,6 +344,7 @@ function formatHumanReviewReason(snapshot) {
 }
 
 function createDraftMarkdown(snapshot) {
+  const publishable = isPublishableSnapshot(snapshot);
   const lines = [
     `# Andes report update draft`,
     ``,
@@ -340,6 +357,7 @@ function createDraftMarkdown(snapshot) {
     `- WHO ship passenger/crew risk moderate: ${snapshot.signals.whoShipRiskModerate}`,
     `- WHO onboard human-to-human evidence language present: ${snapshot.signals.whoOnboardHumanToHumanEvidence}`,
     `- WHO/ECDC confirmed-count disagreement present: ${snapshot.signals.sourceDisagreement}`,
+    `- Publishable webpage snapshot: ${publishable}`,
     ``,
     `## Parsed source snapshots`,
     ``
@@ -364,6 +382,11 @@ function createDraftMarkdown(snapshot) {
   lines.push(``);
   lines.push(`## Suggested editor action`);
   lines.push(``);
+  if (!publishable) {
+    lines.push(
+      `- This run should stay audit-only: keep the timestamped snapshot and draft, but do not replace the public \`data/source-snapshots/latest.*\` files.`
+    );
+  }
   if (snapshot.signals.warnings.length) {
     lines.push(`- Open the official source(s) with baseline warnings and decide whether to update data/incident-data.js.`);
   } else {
@@ -372,6 +395,9 @@ function createDraftMarkdown(snapshot) {
   if (snapshot.signals.sourceDisagreement) {
     lines.push(`- Preserve WHO and ECDC as separate sourceSnapshots; do not merge their confirmed-case counts.`);
   }
+  lines.push(
+    `- After verified data edits and \`npm run validate\`, the dashboard, sources page, and update-history page refresh automatically from the tracked data files.`
+  );
   lines.push(`- Run validation before publishing: \`npm run validate\`.`);
   lines.push(``);
 
@@ -390,11 +416,11 @@ async function readSnapshotIndex() {
   try {
     return JSON.parse(await readFile(join(repoRoot, "data/source-snapshots/index.json"), "utf8"));
   } catch {
-    return { schemaVersion: 1, snapshots: [] };
+    return { schemaVersion: 1, updatedAt: null, lastCheckedAt: null, snapshots: [] };
   }
 }
 
-async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null) {
+async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, publishable = true) {
   const index = await readSnapshotIndex();
   const relativeSnapshotPath = snapshotPath.replace(`${repoRoot}/`, "");
   const relativeDraftPath = draftPath ? draftPath.replace(`${repoRoot}/`, "") : null;
@@ -405,22 +431,29 @@ async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null) {
     warnings: snapshot.signals.warnings.length,
     humanReviewRequired: snapshot.signals.humanReviewRequired,
     officialRiskStillLow: snapshot.signals.officialRiskStillLow,
-    sourceDisagreement: snapshot.signals.sourceDisagreement
+    sourceDisagreement: snapshot.signals.sourceDisagreement,
+    publishable,
+    fetchErrors: countFetchErrors(snapshot),
+    parserBlanks: countParserBlanks(snapshot)
   };
   const snapshots = [nextEntry, ...index.snapshots.filter((item) => item.path !== relativeSnapshotPath)].slice(0, 50);
+  const updatedAt = publishable ? snapshot.checkedAt : index.updatedAt ?? null;
   await writeJson(join(repoRoot, "data/source-snapshots/index.json"), {
     schemaVersion: 1,
-    updatedAt: snapshot.checkedAt,
+    updatedAt,
+    lastCheckedAt: snapshot.checkedAt,
     snapshots
   });
   await writeJsData(join(repoRoot, "data/source-snapshots/index.js"), "SOURCE_SNAPSHOT_INDEX", {
     schemaVersion: 1,
-    updatedAt: snapshot.checkedAt,
+    updatedAt,
+    lastCheckedAt: snapshot.checkedAt,
     snapshots
   });
 }
 
 function printText(snapshot) {
+  const publishable = isPublishableSnapshot(snapshot);
   console.log(`# Andes-report news check`);
   console.log(`Checked at: ${snapshot.checkedAt}`);
   console.log("");
@@ -464,9 +497,15 @@ function printText(snapshot) {
     }`
   );
   console.log(`- Human review required: ${snapshot.signals.humanReviewRequired}`);
+  console.log(`- Publishable webpage snapshot: ${publishable}`);
   console.log(
     "- Manual next step: if counts changed or risk text is no longer low/very low/extremely low, update data/incident-data.js and re-check the relationship chain before changing the narrative."
   );
+  if (!publishable) {
+    console.log(
+      "- Publication note: timestamped audit artifacts can be saved, but the public latest source snapshot should stay on the last successful run."
+    );
+  }
 }
 
 function parseArgs(argv) {
@@ -480,32 +519,44 @@ function parseArgs(argv) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const snapshot = await buildSnapshot();
+  const publishable = isPublishableSnapshot(snapshot);
 
   if (args.mode === "snapshot") {
-    const saved = await saveSnapshot(snapshot);
-    await updateSnapshotIndex(snapshot, saved.snapshotPath);
+    const snapshotPath = await saveTimestampedSnapshot(snapshot);
+    const latestPath = publishable ? await publishLatestSnapshot(snapshot) : null;
+    await updateSnapshotIndex(snapshot, snapshotPath, null, publishable);
     if (args.json) {
-      console.log(JSON.stringify({ ...snapshot, saved }, null, 2));
+      console.log(JSON.stringify({ ...snapshot, snapshotPath, latestPath, publishable }, null, 2));
     } else {
       printText(snapshot);
       console.log("");
-      console.log(`Saved snapshot: ${saved.snapshotPath}`);
-      console.log(`Saved latest: ${saved.latestPath}`);
+      console.log(`Saved snapshot: ${snapshotPath}`);
+      console.log(
+        publishable
+          ? `Updated latest: ${latestPath}`
+          : "Skipped latest snapshot publish because this run had fetch/parser failures."
+      );
     }
     return;
   }
 
   if (args.mode === "update-draft") {
-    const saved = await saveSnapshot(snapshot);
+    const snapshotPath = await saveTimestampedSnapshot(snapshot);
     const draftPath = await saveDraft(snapshot);
-    await updateSnapshotIndex(snapshot, saved.snapshotPath, draftPath);
+    const latestPath = publishable ? await publishLatestSnapshot(snapshot) : null;
+    await updateSnapshotIndex(snapshot, snapshotPath, draftPath, publishable);
     if (args.json) {
-      console.log(JSON.stringify({ ...snapshot, saved, draftPath }, null, 2));
+      console.log(JSON.stringify({ ...snapshot, snapshotPath, latestPath, draftPath, publishable }, null, 2));
     } else {
       printText(snapshot);
       console.log("");
-      console.log(`Saved snapshot: ${saved.snapshotPath}`);
+      console.log(`Saved snapshot: ${snapshotPath}`);
       console.log(`Saved draft: ${draftPath}`);
+      console.log(
+        publishable
+          ? `Updated latest: ${latestPath}`
+          : "Skipped latest snapshot publish because this run had fetch/parser failures."
+      );
     }
     return;
   }

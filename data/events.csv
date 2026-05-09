@@ -10,10 +10,10 @@ date,type,title,place,summary,primary_source
 2026-05-04,official,WHO 发布 Disease Outbreak News,WHO,"WHO 初始通报描述病例、路线、调查方向和公共卫生建议。",WHO DON
 2026-05-07,official,WHO 更新：8 例、5 确诊、3 死亡，病毒为 Andes virus,WHO,"公共卫生风险仍低，后续可能因潜伏期出现更多病例。",WHO Response
 2026-05-07,official,CDC 声明美国公众风险极低,United States,"CDC 正与相关部门和国际机构协调。",CDC Statement
-2026-05-08,official,WHO DON600：8 例、6 确诊、2 可能、3 死亡,WHO,"WHO 将全球风险评估为低，船上乘客和船员风险为中等；当前证据指向船上后续人传人。",WHO DON600
+2026-05-08,official,WHO DON600：8 例、6 确诊、2 可能、3 死亡,WHO,"WHO 将全球风险评估为低，船上乘客和船员风险为中等；当前证据指向船上已知接触环境内的后续人传人。",WHO DON600
 2026-05-08,official,CDC Current Situation：美国公众和旅行者风险极低,United States,"CDC 写明美国尚无因此事件报告的 Andes virus 病例，常规旅行可继续。",CDC Current Situation
-2026-05-08,official,ECDC 每日页更新病例分类和欧洲风险评估,ECDC,"8 例中 5 确诊、2 可能、1 疑似、3 死亡；EU/EEA 普通人群风险非常低。",ECDC Daily
-2026-05-10,response,预计抵达 Tenerife/Granadilla,"Tenerife, Spain","ECDC 5 月 8 日页面写该船预计 5 月 10 日抵达 Tenerife。",ECDC Daily
-2026-05-24,monitoring,2 周观察窗,Monitoring,"若无脱离已知接触链病例，是第一个积极信号；不是官方结案标准。",Derived
+2026-05-09,official,ECDC 每日页与 WHO 对齐为 6 确诊、2 可能、3 死亡,ECDC,"8 例中 6 确诊、2 可能、0 疑似、3 死亡；人传人通常需要密切、长期接触；EU/EEA 普通人群风险非常低。",ECDC Daily
+2026-05-10,response,预计抵达 Tenerife/Granadilla,"Tenerife, Spain","ECDC 5 月 9 日页面写该船继续驶向 Tenerife 的 Granadilla 港，并预计 5 月 10 日抵达。",ECDC Daily
+2026-05-24,monitoring,2 周观察窗,Monitoring,"若无脱离已知接触链病例，可视为第一个积极观察信号；不是官方结案标准。",Derived
 2026-06-21,monitoring,42 天潜伏期窗口,Monitoring,"CDC 写 Andes virus 症状可在暴露后 4-42 天出现。",CDC Andes
-2026-06-24,monitoring,45 天主动症状监测窗口,Monitoring,"WHO 对乘客和船员建议主动症状监测 45 天。",WHO DON
+2026-06-24,monitoring,45 天主动症状监测窗口,Monitoring,"WHO 对乘客和船员建议主动症状监测 45 天；若期间未见无来源病例且风险等级未上调，可转为被动观察。",WHO DON

@@ -11,12 +11,12 @@
       <div>
         <p class="eyebrow">Update history</p>
         <h1>自动化检查记录</h1>
-        <p class="dek">这里显示官方来源检查的快照索引。每次运行都会保存来源 hash、解析结果和是否需要人工复核。</p>
+        <p class="dek">这里显示官方来源检查的快照索引。每次运行都会保存来源 hash、解析结果和是否需要人工复核；失败运行保留审计记录，但不会覆盖当前网页使用的最近成功快照。</p>
       </div>
       <div class="asof">
         <span>最近检查</span>
         <strong id="historyUpdatedAt">-</strong>
-        <span>source snapshot</span>
+        <span id="historyPublishedAt">网页快照 -</span>
       </div>
       <nav class="site-nav" aria-label="Site navigation">
         <a href="./index.html">Dashboard</a>
@@ -31,8 +31,8 @@
       <section class="panel">
         <div class="panel-head">
           <div>
-            <p class="eyebrow">Latest check</p>
-            <h2>最近一次解析结果</h2>
+            <p class="eyebrow">Published snapshot</p>
+            <h2>当前网页使用的最新快照</h2>
           </div>
           <span class="source-pill">human review gate</span>
         </div>
@@ -51,6 +51,7 @@
             <thead>
               <tr>
                 <th>检查时间</th>
+                <th>网页更新</th>
                 <th>风险仍低</th>
                 <th>来源差异</th>
                 <th>警告数</th>
@@ -76,14 +77,18 @@
     <script>
       const index = window.SOURCE_SNAPSHOT_INDEX;
       const latest = window.LATEST_SOURCE_SNAPSHOT;
-      const formatDateTime = (value) => new Intl.DateTimeFormat("zh-CN", {
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      }).format(new Date(value));
+      const formatDateTime = (value) =>
+        value
+          ? new Intl.DateTimeFormat("zh-CN", {
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit"
+            }).format(new Date(value))
+          : "—";
 
-      document.querySelector("#historyUpdatedAt").textContent = formatDateTime(index.updatedAt);
+      document.querySelector("#historyUpdatedAt").textContent = formatDateTime(index.lastCheckedAt ?? index.updatedAt);
+      document.querySelector("#historyPublishedAt").textContent = `网页快照 ${formatDateTime(index.updatedAt)}`;
 
       document.querySelector("#latestSnapshot").innerHTML = latest.results
         .map(
@@ -103,6 +108,7 @@
           (item) => `
             <tr>
               <td>${formatDateTime(item.checkedAt)}</td>
+              <td>${item.publishable === false ? "仅审计" : "已更新"}</td>
               <td>${item.officialRiskStillLow ? "是" : "否"}</td>
               <td>${item.sourceDisagreement ? "是" : "否"}</td>
               <td>${item.warnings}</td>

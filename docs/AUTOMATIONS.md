@@ -11,18 +11,20 @@ Workspace: `/Users/linji/projects/Andes-report`
 Expected behavior:
 
 1. Run `npm run check-news`.
-2. Run `npm run draft-update` when a durable audit artifact is useful.
+2. Run `npm run update-news` in scheduled automation so the run saves an auditable draft, validates, and refreshes public source-snapshot files when publishable.
 3. Review WHO DON latest, ECDC daily update, and CDC Current Situation.
-4. If official counts or risk language changed, update static data files and CSV exports.
-5. Preserve source disagreements instead of flattening them.
-6. Keep changes local and source-traceable unless the user explicitly asks for a publish/push step.
-7. Report changed files and validation output.
+4. If official counts or risk language changed, update `data/incident-data.js` first, then mirror durable rows in `data/events.csv` and `data/sources.csv`.
+5. Treat those data-file edits as the webpage update: `index.html`, `sources.html`, and other dashboard pages read the tracked data directly, so no separate HTML copy pass is required unless layout text itself changes.
+6. Preserve source disagreements instead of flattening them, but remove stale disagreement language when WHO and ECDC later realign.
+7. Keep failed fetch/parser runs as timestamped audit artifacts only; do not overwrite `data/source-snapshots/latest.*` on the public webpage unless the check is publishable.
+8. Scheduled GitHub automation should commit and push validated generated status files so GitHub Pages redeploys the latest check state automatically.
+9. Report changed files and validation output.
 
 ## CI Split
 
 `Validate` is intentionally offline for push and pull request events. It checks syntax and local data integrity without hitting WHO/CDC/ECDC on every code change.
 
-`News Check` is the live network workflow. It runs on the 6-hour schedule and can also be triggered manually.
+`News Check And Publish` is the live network workflow. It runs on the 6-hour schedule, updates organized snapshot/draft artifacts, commits them back to `main`, and lets the normal Pages workflow deploy the refreshed public status.
 
 The automation should use:
 

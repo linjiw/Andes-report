@@ -13,17 +13,22 @@ Maintain this repo as a source-traceable, signal-driven public health tracker fo
 
 1. Read [docs/NEWS_UPDATE_PLAYBOOK.md](../../../docs/NEWS_UPDATE_PLAYBOOK.md).
 2. Run `npm run check-news`.
-3. Run `npm run draft-update` when an auditable source snapshot and editor-facing draft should be saved.
-4. Verify official pages directly when the script detects count or risk-language changes.
-5. Update `data/incident-data.js` first, then mirror durable rows in `data/events.csv` and `data/sources.csv`.
-6. Rewrite Chinese copy so it separates fact, interpretation, and uncertainty.
-7. Validate with:
+3. Run `npm run draft-update` when an auditable source snapshot and editor-facing draft should be saved, or `npm run update-news` for the full scheduled refresh path.
+4. Verify official pages directly when the script detects count or risk-language changes, or when fetch/parser failures make the saved draft audit-only.
+5. Update `data/incident-data.js` first, then mirror durable rows in `data/events.csv` and `data/sources.csv` in the same run; do not stop at a draft if the source change is clear.
+6. Treat those data-file edits as the webpage update. The dashboard, sources page, and history page read repo data directly, so there is no extra manual HTML sync step for routine source refreshes.
+7. Rewrite Chinese copy so it separates fact, interpretation, and uncertainty.
+8. Validate with:
 
 ```bash
 npm run validate
 ```
 
 Run `npm run validate-with-news` before changing source-driven facts or risk language.
+
+In the scheduled GitHub automation path, commit and push validated generated snapshot/draft files after the run so GitHub Pages publishes the latest public status automatically.
+
+Only let a successful, publishable official-source check replace `data/source-snapshots/latest.*`. Keep failed fetch/parser runs as timestamped audit artifacts without pushing them into the public latest snapshot.
 
 ## Source Policy
 
@@ -40,6 +45,8 @@ Do not let media reports override Tier 1 case counts or risk language.
 ## Data Rules
 
 Preserve source disagreements in `sourceSnapshots`. Do not average, add, or overwrite official counts across sources.
+
+If a previous WHO/ECDC disagreement later disappears, remove stale disagreement framing from the dashboard copy and shift uncertainty back to transmission-chain or follow-up-monitoring questions.
 
 Required fields for each snapshot:
 

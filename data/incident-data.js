@@ -1,18 +1,18 @@
 window.INCIDENT_DATA = {
   meta: {
     title: "MV Hondius Andes Hantavirus 事件追踪",
-    subtitle: "新闻核验、时间线、风险信号与数据看板",
+    subtitle: "官方来源核验、时间线、风险信号与监测窗口",
     asOf: "2026-05-09",
     timezone: "America/New_York",
-    dataVersion: "2026-05-09.v2",
+    dataVersion: "2026-05-09.v3",
     posture:
-      "截至本版，最新 WHO 一手通报支持“严重的局部旅行/密接暴露事件，而非 COVID 式广泛传播”的判断；WHO 与 ECDC 的 5 月 8 日病例分类存在时间点差异，本站并列展示。"
+      "截至本版，WHO 2026-05-08 DON600 与 ECDC 2026-05-09 每日页在总病例与分类上已对齐为 8 例、6 确诊、2 可能、3 死亡；当前仍应把不确定性放在传播链细节与后续是否出现脱离已知接触环境的新病例，而不是继续强调旧的分类差异。"
   },
   summary: [
-    "本事件涉及汉坦病毒家族中的 Andes virus，不应简单写成 Hantaan virus。",
-    "WHO 2026-05-08 DON600 写明：8 例报告病例，6 例实验室确诊为 Andes virus，2 例可能，3 人死亡；WHO 将全球风险评估为低，船上乘客和船员风险为中等。",
-    "ECDC 2026-05-08 每日页仍显示 5 确诊、2 可能、1 疑似、3 死亡；这是需要在自动化中保留的来源差异，不应强行合并。",
-    "CDC 2026-05-08 Current Situation 写明美国尚无因此事件报告的 Andes virus 病例，美国公众和旅行者总体风险仍极低。"
+    "本事件涉及汉坦病毒家族中的 Andes virus；页面统一写作 Andes virus / 安第斯病毒，不混写为 Hantaan virus。",
+    "WHO 2026-05-08 DON600 写明：8 例报告病例，6 例实验室确诊为 Andes virus，2 例可能，3 人死亡；全球公众风险为低，船上乘客和船员风险为中等。",
+    "ECDC 2026-05-09 每日页已改为 6 确诊、2 可能、0 疑似、3 死亡，与 WHO 2026-05-08 DON600 的病例分类一致；EU/EEA 普通人群风险仍为非常低。",
+    "CDC 2026-05-08 Current Situation 仍写明美国尚无因此事件报告的 Andes virus 病例，美国公众和旅行者总体风险仍极低。"
   ],
   stats: [
     {
@@ -25,21 +25,21 @@ window.INCIDENT_DATA = {
     {
       label: "ECDC 同日口径",
       value: "8",
-      detail: "5 确诊 / 2 可能 / 1 疑似 / 3 死亡",
+      detail: "6 确诊 / 2 可能 / 0 疑似 / 3 死亡",
       tone: "violet",
       sourceIds: ["ecdc-daily"]
     },
     {
       label: "死亡",
       value: "3",
-      detail: "WHO: CFR 38%",
+      detail: "截至 WHO 2026-05-08 / ECDC 2026-05-09，两者均报 3 例死亡",
       tone: "red",
       sourceIds: ["who-don", "ecdc-daily"]
     },
     {
       label: "船上风险",
       value: "中等",
-      detail: "WHO: 船上乘客/船员；全球公众为低",
+      detail: "WHO: 仅船上乘客/船员为中等；全球公众为低",
       tone: "amber",
       sourceIds: ["who-don"]
     },
@@ -78,15 +78,15 @@ window.INCIDENT_DATA = {
     },
     {
       source: "ECDC daily",
-      date: "2026-05-08",
+      date: "2026-05-09",
       total: 8,
-      confirmed: 5,
+      confirmed: 6,
       probable: 2,
-      suspected: 1,
+      suspected: 0,
       nonCases: null,
       deaths: 3,
       publicRisk: "EU/EEA general population very low",
-      note: "ECDC 每日页保留一个疑似病例；与 WHO DON600 不强行合并。",
+      note: "ECDC 每日页已更新为与 WHO DON600 一致的 6 确诊、2 可能；风险口径仍维持 EU/EEA 普通人群非常低。",
       sourceIds: ["ecdc-daily"]
     },
     {
@@ -115,7 +115,7 @@ window.INCIDENT_DATA = {
       org: "ECDC",
       rating: "Very low",
       audience: "EU/EEA 普通人群",
-      date: "2026-05-08",
+      date: "2026-05-09",
       sourceIds: ["ecdc-daily"]
     },
     {
@@ -131,7 +131,7 @@ window.INCIDENT_DATA = {
       label: "第一观察窗",
       from: "2026-05-10",
       to: "2026-05-24",
-      rule: "若以 ECDC 写明的预计抵达/集中处置日 5 月 10 日作为最后船上暴露锚点，+14 天是第一个积极信号窗口。",
+      rule: "若以 ECDC 写明的预计抵达/集中处置日 5 月 10 日作为最后船上暴露锚点，+14 天可作为第一个观察节点；这不是官方结案时间。",
       sourceIds: ["ecdc-daily"]
     },
     {
@@ -145,7 +145,7 @@ window.INCIDENT_DATA = {
       label: "WHO 主动监测",
       from: "2026-05-10",
       to: "2026-06-24",
-      rule: "WHO 对乘客和船员建议 45 天主动症状监测；按 5 月 10 日锚点约到 6 月 24 日。",
+      rule: "WHO 对乘客和船员建议主动症状监测 45 天；按 5 月 10 日锚点约到 6 月 24 日，之后更适合转为被动观察官方更新。",
       sourceIds: ["who-don"]
     }
   ],
@@ -262,7 +262,7 @@ window.INCIDENT_DATA = {
       title: "WHO DON600：8 例、6 确诊、2 可能、3 死亡",
       place: "WHO",
       detail:
-        "WHO 5 月 8 日 DON600 写明所有 6 例实验室确诊均为 Andes virus；全球风险为低，船上乘客和船员风险为中等。WHO 同时指出当前证据指向船上后续人传人，但仍需流行病学和测序调查确认链条细节。",
+        "WHO 5 月 8 日 DON600 写明所有 6 例实验室确诊均为 Andes virus；全球风险为低，船上乘客和船员风险为中等。WHO 同时指出当前证据指向船上已知接触环境内的后续人传人，但链条细节仍待流行病学和测序调查确认。",
       sourceIds: ["who-don"]
     },
     {
@@ -276,15 +276,6 @@ window.INCIDENT_DATA = {
     },
     {
       date: "2026-05-08",
-      type: "official",
-      title: "ECDC 每日页更新病例分类和欧洲风险评估",
-      place: "ECDC",
-      detail:
-        "ECDC 写明 8 例中 5 确诊、2 可能、1 疑似、3 死亡；EU/EEA 普通人群风险非常低。",
-      sourceIds: ["ecdc-daily"]
-    },
-    {
-      date: "2026-05-08",
       type: "response",
       title: "AP/Reuters 报道各国接收、疏散和检测行动进展",
       place: "Spain / Singapore / international",
@@ -293,12 +284,21 @@ window.INCIDENT_DATA = {
       sourceIds: ["ap-may8", "reuters-may8"]
     },
     {
+      date: "2026-05-09",
+      type: "official",
+      title: "ECDC 每日页与 WHO 对齐为 6 确诊、2 可能、3 死亡",
+      place: "ECDC",
+      detail:
+        "ECDC 2026-05-09 页面写明 8 例中 6 确诊、2 可能、0 疑似、3 死亡；并继续写明人传人通常需要密切、长期接触，EU/EEA 普通人群风险非常低。",
+      sourceIds: ["ecdc-daily"]
+    },
+    {
       date: "2026-05-10",
       type: "response",
       title: "预计抵达 Tenerife/Granadilla",
       place: "Tenerife, Spain",
       detail:
-        "ECDC 5 月 8 日页面写该船预计 5 月 10 日抵达 Tenerife。若该日后不再有船上新暴露，可作为后续监测窗口锚点。",
+        "ECDC 2026-05-09 页面写该船继续驶向 Tenerife 的 Granadilla 港，并将于 5 月 10 日抵达。若该日后不再有船上新暴露，可作为后续监测窗口锚点。",
       status: "planned",
       sourceIds: ["ecdc-daily"]
     },
@@ -308,7 +308,7 @@ window.INCIDENT_DATA = {
       title: "2 周观察窗",
       place: "Monitoring",
       detail:
-        "按 5 月 10 日最后船上暴露锚点估算，若无脱离已知接触链病例，是第一个积极信号；这不是官方结案标准。",
+        "按 5 月 10 日最后船上暴露锚点估算，若无脱离已知接触链病例，可视为第一个积极观察信号；这不是官方结案标准。",
       sourceIds: ["ecdc-daily", "cdc-andes"]
     },
     {
@@ -326,7 +326,7 @@ window.INCIDENT_DATA = {
       title: "45 天主动症状监测窗口",
       place: "Monitoring",
       detail:
-        "WHO 对乘客和船员建议主动症状监测 45 天；若风险等级仍低且无无来源病例，可基本收尾。",
+        "WHO 对乘客和船员建议主动症状监测 45 天；若期间未见无来源病例且风险等级未上调，可把站点从高频跟踪转为被动观察。",
       sourceIds: ["who-don"]
     }
   ],
@@ -336,15 +336,15 @@ window.INCIDENT_DATA = {
       name: "官方风险等级维持低/非常低/极低",
       current: "满足",
       why: "WHO 对全球公众风险为低，ECDC 对 EU/EEA 普通人群风险为非常低，CDC 对美国公众和旅行者风险为极低；但 WHO 对船上乘客和船员风险为中等。",
-      action: "继续低频查看官方更新。",
+      action: "继续按既定节奏核对 WHO、ECDC、CDC 更新。",
       sourceIds: ["who-don", "ecdc-daily", "cdc-current"]
     },
     {
       severity: "green",
       name: "新增病例仍属于已知乘客/船员/密接圈",
       current: "待持续确认",
-      why: "潜伏期内已知暴露者新增发病并不等同社区传播。",
-      action: "看病例关系链，不只看新增数字。",
+      why: "截至 WHO 2026-05-08 和 ECDC 2026-05-09，新增病例仍落在已知乘客、船员或密接圈内；潜伏期内已知暴露者新增发病并不等同社区传播。",
+      action: "看病例是否脱离已知接触链，而不只看新增数字。",
       sourceIds: ["who-don", "ecdc-daily"]
     },
     {
@@ -352,7 +352,7 @@ window.INCIDENT_DATA = {
       name: "船医病例与船上有限人传人证据",
       current: "已出现，仍属于已知船上接触链",
       why: "WHO DON600 列出一名船医确诊，并写当前证据指向船上后续人传人；这符合 Andes virus 可在密切、长期接触中有限传播的已知模式，不等于普通短暂接触传播。",
-      action: "继续看是否出现规范防护下的连续医护感染、家庭外二代链条或普通接触传播证据。",
+      action: "重点看是否出现脱离已知船上环境的连续医护感染、家庭外二代链条或普通接触传播证据。",
       sourceIds: ["who-don", "cdc-current", "ecdc-assessment"]
     },
     {
@@ -360,7 +360,7 @@ window.INCIDENT_DATA = {
       name: "无邮轮、无南美旅行、无鼠类暴露、无密接的新确诊",
       current: "未见官方证据",
       why: "这会提示可能存在未识别传播链或独立动物暴露。",
-      action: "若出现多个，应重新评估个人风险和信息更新频率。",
+      action: "若出现多个，应把站点状态改为重新核对传播边界和风险口径。",
       sourceIds: ["ecdc-daily", "who-response"]
     },
     {
@@ -398,8 +398,8 @@ window.INCIDENT_DATA = {
     },
     {
       period: "6 月下旬以后",
-      cadence: "停止主动跟踪",
-      focus: "除非 WHO/ECDC/CDC 发布新警报。"
+      cadence: "转为被动观察",
+      focus: "仅在 WHO/ECDC/CDC 发布新警报或新病例链时恢复高频更新。"
     }
   ],
   sources: [
@@ -428,16 +428,16 @@ window.INCIDENT_DATA = {
       org: "WHO",
       date: "2026-05-07",
       url: "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
-      useFor: "最新 WHO 口径：8 例、5 确诊、3 死亡、Andes virus、低风险"
+      useFor: "5 月 7 日 WHO 过渡更新口径：8 例、5 确诊、3 死亡、Andes virus、低风险"
     },
     {
       id: "ecdc-daily",
       priority: 1,
       name: "Andes Hantavirus outbreak in cruise ship, May 2026",
       org: "ECDC",
-      date: "2026-05-08",
+      date: "2026-05-09",
       url: "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
-      useFor: "每日更新病例分类、死亡数、欧洲风险评估、预计抵达 Tenerife 日期"
+      useFor: "每日更新病例分类、死亡数、欧洲风险评估，以及 5 月 9 日对齐到 6 确诊 / 2 可能 / 0 疑似的口径"
     },
     {
       id: "ecdc-assessment",

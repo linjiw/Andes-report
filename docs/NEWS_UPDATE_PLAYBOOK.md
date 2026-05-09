@@ -22,6 +22,18 @@ To save a snapshot plus an editor-facing update draft:
 npm run draft-update
 ```
 
+To run the full automated refresh cycle used by scheduled GitHub automation:
+
+```bash
+npm run update-news
+```
+
+Important:
+
+- `draft-update` is an audit step, not a substitute for updating `data/incident-data.js`.
+- Only publish a new `data/source-snapshots/latest.*` snapshot to the webpage when the run fetched and parsed official sources successfully.
+- The scheduled automation should commit and push generated snapshot/draft changes after validation so GitHub Pages redeploys the latest public status.
+
 Primary source order:
 
 1. WHO DON latest event page.
@@ -48,6 +60,8 @@ Then mirror important event/source rows in:
 
 - `data/events.csv`
 - `data/sources.csv`
+
+When those files are updated and validated, the webpage is already refreshed because the static pages read these data files directly.
 
 ## 3. Classify The Change
 
@@ -105,6 +119,8 @@ For visual changes, serve locally and inspect:
 ```bash
 python3 -m http.server 4173
 ```
+
+There is no separate site build step for routine data refreshes. `index.html`, `sources.html`, and `history.html` read the tracked data and generated snapshot files directly.
 
 ## 6. Human Review Required
 

@@ -1,6 +1,6 @@
-window.LATEST_SOURCE_SNAPSHOT = {
+{
   "schemaVersion": 1,
-  "checkedAt": "2026-05-09T17:26:32.375Z",
+  "checkedAt": "2026-05-09T16:59:06.751Z",
   "results": [
     {
       "id": "who-don",
@@ -9,8 +9,8 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "contentHash": "c1db0daf65f410585235d19a22121e2af0a326e8e128faceff6c8eeacc41f520",
-      "fetchedTextLength": 31662,
+      "contentHash": "cc97303670249607efcb76eff9d1f1fc26b15b0e0a17e48451226dda57ff0627",
+      "fetchedTextLength": 31630,
       "parsed": {
         "totalCases": 8,
         "confirmed": 6,
@@ -110,4 +110,4 @@ window.LATEST_SOURCE_SNAPSHOT = {
     "warnings": [],
     "humanReviewRequired": true
   }
-};
+}

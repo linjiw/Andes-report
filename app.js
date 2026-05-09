@@ -36,6 +36,15 @@ function sourceLabel(ids) {
     .join(" / ");
 }
 
+function sourceDateLabel(ids) {
+  return ids
+    .map((id) => sourceMap.get(id))
+    .filter(Boolean)
+    .map((source) => `${source.org} ${source.date}`)
+    .filter((label, index, arr) => arr.indexOf(label) === index)
+    .join(" / ");
+}
+
 function renderSummary() {
   document.querySelector("#asOf").textContent = data.meta.asOf;
   document.querySelector("#dataVersion").textContent = data.meta.dataVersion;
@@ -54,7 +63,7 @@ function renderMetrics() {
           <span class="label">${stat.label}</span>
           <strong class="value">${stat.value}</strong>
           <p class="detail">${stat.detail}</p>
-          <p class="detail">来源：${sourceLabel(stat.sourceIds)}</p>
+          <p class="detail">来源：${sourceDateLabel(stat.sourceIds)}</p>
         </article>
       `
     )
@@ -123,7 +132,7 @@ function renderSourceSnapshots() {
       (snapshot) => `
         <article class="snapshot-card">
           <h3>${snapshot.source}</h3>
-          <span class="snapshot-date">${snapshot.date} · 来源：${sourceLabel(snapshot.sourceIds)}</span>
+          <span class="snapshot-date">${snapshot.date} · 来源：${sourceDateLabel(snapshot.sourceIds)}</span>
           <div class="snapshot-counts">
             <span><strong>${snapshot.total ?? "—"}</strong>报告病例</span>
             <span><strong>${snapshot.confirmed ?? "—"}</strong>确诊</span>
@@ -233,7 +242,7 @@ function renderTimeline(filterType = "all") {
           </div>
           <div>
             <h3>${event.title}</h3>
-            <div class="event-place">${event.place} · 来源：${sourceLabel(event.sourceIds)}</div>
+            <div class="event-place">${event.place} · 来源：${sourceDateLabel(event.sourceIds)}</div>
             <p>${event.detail}</p>
           </div>
         </article>
