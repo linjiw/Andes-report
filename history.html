@@ -45,13 +45,16 @@
             <p class="eyebrow">Snapshots</p>
             <h2>快照索引</h2>
           </div>
+          <div class="source-actions">
+            <a href="./data/framework-review/latest.md">framework-review</a>
+          </div>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>检查时间</th>
-                <th>网页更新</th>
+                <th>状态页更新</th>
                 <th>风险仍低</th>
                 <th>来源差异</th>
                 <th>警告数</th>
@@ -108,7 +111,7 @@
           (item) => `
             <tr>
               <td>${formatDateTime(item.checkedAt)}</td>
-              <td>${item.publishable === false ? "仅审计" : "已更新"}</td>
+              <td>${item.statusPublished === true ? "已更新" : item.statusPublished === false ? "仅审计" : "旧记录"}</td>
               <td>${item.officialRiskStillLow ? "是" : "否"}</td>
               <td>${item.sourceDisagreement ? "是" : "否"}</td>
               <td>${item.warnings}</td>

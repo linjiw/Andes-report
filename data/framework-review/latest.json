@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-05-09T17:58:08.402Z",
+  "latest": {
+    "checkedAt": "2026-05-09T17:57:37.377Z",
+    "status": {
+      "fetchErrors": 0,
+      "parserBlanks": 0,
+      "snapshotReady": true,
+      "humanReviewRequired": true
+    },
+    "keyFacts": [
+      {
+        "sourceId": "who-don",
+        "label": "WHO Disease Outbreak News latest",
+        "facts": {
+          "caseCounts": {
+            "total": 8,
+            "confirmed": 6,
+            "probable": 2,
+            "suspected": 0,
+            "deaths": 3
+          },
+          "risk": {
+            "globalLow": true,
+            "shipModerate": true
+          },
+          "transmission": {
+            "onboardHumanToHumanEvidence": true
+          }
+        }
+      },
+      {
+        "sourceId": "who-response",
+        "label": "WHO response update, historical",
+        "facts": {
+          "caseCounts": {
+            "total": 8,
+            "confirmed": 5,
+            "deaths": 3
+          },
+          "risk": {
+            "globalLow": true
+          }
+        }
+      },
+      {
+        "sourceId": "ecdc-daily",
+        "label": "ECDC daily update",
+        "facts": {
+          "caseCounts": {
+            "total": 8,
+            "confirmed": 6,
+            "probable": 2,
+            "suspected": 0,
+            "deaths": 3
+          },
+          "risk": {
+            "regionalVeryLow": true
+          },
+          "travel": {
+            "tenerifeMay10": true
+          }
+        }
+      },
+      {
+        "sourceId": "cdc-current",
+        "label": "CDC current situation",
+        "facts": {
+          "risk": {
+            "usPublicExtremelyLow": true
+          },
+          "travel": {
+            "routineTravelNormal": true
+          },
+          "monitoring": {
+            "symptoms4to42Days": true
+          },
+          "cases": {
+            "noUsOutbreakLinkedCases": true
+          }
+        }
+      }
+    ]
+  },
+  "dashboardSync": {
+    "whoAligned": true,
+    "ecdcAligned": true,
+    "cdcAligned": true,
+    "overallAligned": true
+  },
+  "warningPatterns": {
+    "recentRuns": 5,
+    "parserBlankRuns": 0,
+    "fetchErrorRuns": 0,
+    "humanReviewRuns": 5
+  },
+  "registryCoverage": {
+    "missingInRegistry": [],
+    "unusedRegistrySources": [],
+    "pollableMissingFromLatest": []
+  },
+  "recommendations": [
+    "Human review is still required for the latest official check before treating narrative/risk interpretation as settled."
+  ]
+}

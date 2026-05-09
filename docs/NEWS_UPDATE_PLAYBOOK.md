@@ -28,12 +28,20 @@ To run the full automated refresh cycle used by scheduled GitHub automation:
 npm run update-news
 ```
 
+To run the daily framework self-audit:
+
+```bash
+npm run framework-review
+```
+
 Important:
 
 - `draft-update` is an audit step, not a substitute for updating `data/incident-data.js`.
 - Only publish a new `data/source-snapshots/latest.*` snapshot to the webpage when the run fetched and parsed official sources successfully.
 - The scheduled automation should commit and push generated snapshot/draft changes after validation so GitHub Pages redeploys the latest public status.
 - The homepage should show whether the curated dashboard is already aligned with the latest successful official check; do not imply a fully synchronized narrative when only snapshot/history files were refreshed.
+- `framework-review` is the daily meta-loop for parser drift, source-registry gaps, and dashboard-sync truthfulness.
+- If you want parallel research with Codex subagents, do it in Codex app automation or an interactive Codex session, not in GitHub Actions.
 
 Primary source order:
 
@@ -123,6 +131,8 @@ python3 -m http.server 4173
 
 There is no separate site build step for routine data refreshes. `index.html`, `sources.html`, and `history.html` read the tracked data and generated snapshot files directly.
 
+For framework-level maintenance, review `data/framework-review/latest.md` after the daily review automation runs.
+
 ## 6. Human Review Required
 
 Require human review before public release if the update changes:
@@ -133,6 +143,8 @@ Require human review before public release if the update changes:
 - risk level
 - travel or quarantine guidance
 - medical symptoms or when to seek care
+
+This gate applies to curated dashboard facts, interpretation, and copy. Timestamped audit snapshots and clearly labeled status/history artifacts may still publish automatically, as long as the site does not imply the narrative was fully re-reviewed.
 
 ## 7. Commit Style
 

@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "who-don",
+      "org": "WHO",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_outbreak_notice",
+      "language": "en",
+      "active": true,
+      "pollable": true,
+      "name": "WHO Disease Outbreak News: Hantavirus cluster linked to cruise ship travel",
+      "canonicalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "checkLabel": "WHO Disease Outbreak News latest",
+      "parserKey": "who-don",
+      "roles": ["primary-count", "global-risk", "ship-risk", "transmission-assessment"],
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 6,
+        "probable": 2,
+        "suspected": 0,
+        "deaths": 3
+      }
+    },
+    {
+      "id": "who-don-2026-05-04",
+      "org": "WHO",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_outbreak_notice",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "WHO Disease Outbreak News: initial cruise ship cluster report",
+      "canonicalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON599",
+      "roles": ["historical-baseline"]
+    },
+    {
+      "id": "who-response",
+      "org": "WHO",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_response_update",
+      "language": "en",
+      "active": true,
+      "pollable": true,
+      "name": "WHO response to hantavirus cases linked to a cruise ship",
+      "canonicalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
+      "checkLabel": "WHO response update, historical",
+      "parserKey": "who-response",
+      "roles": ["historical-count-check", "historical-risk-check"],
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 5,
+        "deaths": 3
+      }
+    },
+    {
+      "id": "ecdc-daily",
+      "org": "ECDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_daily_update",
+      "language": "en",
+      "active": true,
+      "pollable": true,
+      "name": "Andes Hantavirus outbreak in cruise ship, May 2026",
+      "canonicalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+      "checkLabel": "ECDC daily update",
+      "parserKey": "ecdc-daily",
+      "roles": ["comparison-count", "regional-risk", "travel-anchor"],
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 6,
+        "probable": 2,
+        "suspected": 0,
+        "deaths": 3
+      }
+    },
+    {
+      "id": "ecdc-assessment",
+      "org": "ECDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_assessment",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "Hantavirus-associated cluster of illness on a cruise ship: ECDC assessment and recommendations",
+      "canonicalUrl": "https://www.ecdc.europa.eu/en/publications-data/hantavirus-associated-cluster-illness-cruise-ship-ecdc-assessment-and",
+      "roles": ["background-assessment", "transmission-context"]
+    },
+    {
+      "id": "cdc-current",
+      "org": "CDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_current_situation",
+      "language": "en",
+      "active": true,
+      "pollable": true,
+      "name": "Hantavirus: Current Situation",
+      "canonicalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
+      "checkLabel": "CDC current situation",
+      "parserKey": "cdc-current",
+      "roles": ["us-risk", "us-cases", "travel-guidance", "symptom-guidance"],
+      "baseline": {
+        "riskExtremelyLow": true,
+        "noUsCases": true,
+        "routineTravelNormal": true,
+        "symptoms4to42Days": true
+      }
+    },
+    {
+      "id": "cdc-statement",
+      "org": "CDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_statement",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "Statement on the M/V Hondius Cruise Ship",
+      "canonicalUrl": "https://www.cdc.gov/media/releases/2026-hantavirus-confirmed-cruise-ship.html",
+      "roles": ["historical-us-statement"]
+    },
+    {
+      "id": "cdc-andes",
+      "org": "CDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_background_page",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "About Andes Virus",
+      "canonicalUrl": "https://www.cdc.gov/hantavirus/about/andesvirus.html",
+      "roles": ["background-symptoms", "background-transmission"]
+    },
+    {
+      "id": "ap-may8",
+      "org": "AP",
+      "priority": 2,
+      "tier": 2,
+      "kind": "media_logistics",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "Spanish authorities prepare for hantavirus cruise ship arrival",
+      "canonicalUrl": "https://apnews.com/article/e5b35d12be9dc30213d7a2b8b4955a88",
+      "roles": ["logistics-only"]
+    },
+    {
+      "id": "reuters-may8",
+      "org": "Reuters",
+      "priority": 2,
+      "tier": 2,
+      "kind": "media_logistics",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "Singapore tests two residents for hantavirus after cruise outbreak",
+      "canonicalUrl": "https://www.reuters.com/business/healthcare-pharmaceuticals/singapore-tests-two-residents-hantavirus-after-cruise-outbreak-2026-05-08/",
+      "roles": ["logistics-only"]
+    }
+  ]
+}

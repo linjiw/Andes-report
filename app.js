@@ -92,7 +92,7 @@ function dashboardSyncStatus() {
   return {
     aligned: Boolean(whoAligned && ecdcAligned && cdcAligned),
     checkedAt: latestSnapshot.checkedAt,
-    publishable: (latestSnapshot.signals?.warnings?.length ?? 0) === 0,
+    snapshotReady: latestSnapshot.status?.snapshotReady ?? (latestSnapshot.signals?.warnings?.length ?? 0) === 0,
     humanReviewRequired: Boolean(latestSnapshot.signals?.humanReviewRequired)
   };
 }
@@ -126,9 +126,9 @@ function renderAutomationStatus() {
     return;
   }
 
-  pill.textContent = status.publishable ? "最新检查未完全同步到首页" : "仅有审计快照";
+  pill.textContent = status.snapshotReady ? "最新检查未完全同步到首页" : "仅有审计快照";
   summary.textContent = `最近一次官方检查时间：${checkedAtLabel}。当前首页整理版可能落后于最新公开检查结果，请优先查看 Update history 和官方口径快照。`;
-  detail.textContent = status.publishable
+  detail.textContent = status.snapshotReady
     ? "这通常表示自动检查已拿到新官方结果，但 curated dashboard 仍需补充结构化数据或中文说明。"
     : "这通常表示最近一次运行存在抓取或解析失败，所以只保留了审计记录，没有替换当前公开快照。";
 }

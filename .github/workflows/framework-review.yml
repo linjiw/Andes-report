@@ -1,0 +1,53 @@
+name: Daily Framework Review
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "43 13 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: andes-framework-review
+  cancel-in-progress: true
+
+jobs:
+  framework-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Validate repo state
+        run: npm run validate
+
+      - name: Build framework review
+        run: npm run framework-review
+
+      - name: Commit and push framework review
+        run: |
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No framework review changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/framework-review
+          if git diff --cached --quiet; then
+            echo "Framework review files did not change."
+            exit 0
+          fi
+
+          git commit -m "Automated framework review $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:${GITHUB_REF_NAME}

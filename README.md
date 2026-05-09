@@ -57,12 +57,12 @@ npm run validate-with-news
 
 ## 当前口径
 
-截至 2026-05-09，本版采用的核心口径是并列官方快照：
+不要把本 README 当作当前病例和风险数字的权威副本。最新公开状态应以这些位置为准：
 
-- WHO DON600 2026-05-08：8 例报告病例，6 例实验室确诊为 Andes virus，2 例可能，3 人死亡；全球风险低，船上乘客和船员风险中等。
-- ECDC 2026-05-08 页面：8 例报告病例，5 例确诊，2 例可能，1 例疑似，3 例死亡；EU/EEA 普通人群风险非常低。
-- CDC Current Situation 2026-05-08：美国尚无因此事件报告的 Andes virus 病例，美国公众和旅行者风险极低，常规旅行可以继续。
-- CDC Andes virus 页面：症状可在暴露后 4-42 天出现；Andes virus 可发生有限人传人，但不是 COVID 式高效传播。
+- 首页与历史页：[`index.html`](/Users/linji/projects/Andes-report/index.html) 和 [`history.html`](/Users/linji/projects/Andes-report/history.html)
+- 当前结构化数据：[`data/incident-data.js`](/Users/linji/projects/Andes-report/data/incident-data.js)
+- 最近一次自动官方检查：[`data/source-snapshots/latest.json`](/Users/linji/projects/Andes-report/data/source-snapshots/latest.json)
+- 规范来源注册表：[`data/source-registry.json`](/Users/linji/projects/Andes-report/data/source-registry.json)
 
 ## Project docs
 
@@ -91,14 +91,10 @@ npm run validate-with-news
 
 ## 主要来源
 
-- [WHO Disease Outbreak News DON600](https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600)
-- [WHO Disease Outbreak News DON599](https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON599)
-- [WHO response update](https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship)
-- [ECDC daily update](https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak)
-- [ECDC assessment](https://www.ecdc.europa.eu/en/publications-data/hantavirus-associated-cluster-illness-cruise-ship-ecdc-assessment-and)
-- [CDC Current Situation](https://www.cdc.gov/hantavirus/situation-summary/index.html)
-- [CDC statement](https://www.cdc.gov/media/releases/2026-hantavirus-confirmed-cruise-ship.html)
-- [CDC Andes virus background](https://www.cdc.gov/hantavirus/about/andesvirus.html)
+公开来源清单在两处维护：
+
+- 机器可读注册表：[`data/source-registry.json`](/Users/linji/projects/Andes-report/data/source-registry.json)
+- 页面展示列表：[`sources.html`](/Users/linji/projects/Andes-report/sources.html)
 
 ## 说明
 

@@ -7,62 +7,8 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const SNAPSHOT_RETENTION = 50;
-
-const sourceConfigs = [
-  {
-    id: "who-don",
-    label: "WHO Disease Outbreak News latest",
-    tier: 1,
-    url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
-    parser: parseWhoDon,
-    baseline: {
-      totalCases: 8,
-      confirmed: 6,
-      probable: 2,
-      suspected: 0,
-      deaths: 3
-    }
-  },
-  {
-    id: "ecdc-daily",
-    label: "ECDC daily update",
-    tier: 1,
-    url: "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
-    parser: parseEcdc,
-    baseline: {
-      totalCases: 8,
-      confirmed: 6,
-      probable: 2,
-      suspected: 0,
-      deaths: 3
-    }
-  },
-  {
-    id: "who-response",
-    label: "WHO response update, historical",
-    tier: 1,
-    url: "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
-    parser: parseWhoResponse,
-    baseline: {
-      totalCases: 8,
-      confirmed: 5,
-      deaths: 3
-    }
-  },
-  {
-    id: "cdc-current",
-    label: "CDC current situation",
-    tier: 1,
-    url: "https://www.cdc.gov/hantavirus/situation-summary/index.html",
-    parser: parseCdc,
-    baseline: {
-      riskExtremelyLow: true,
-      noUsCases: true,
-      routineTravelNormal: true,
-      symptoms4to42Days: true
-    }
-  }
-];
+const sourceRegistry = JSON.parse(await readFile(join(repoRoot, "data/source-registry.json"), "utf8"));
+const sourceRegistryById = new Map(sourceRegistry.sources.map((source) => [source.id, source]));
 
 const numberWords = new Map([
   ["one", 1],
@@ -193,6 +139,107 @@ function parseCdc(text) {
   };
 }
 
+function normalizeFacts(source, parsed) {
+  if (source.roles?.includes("primary-count")) {
+    return {
+      caseCounts: {
+        total: parsed.totalCases ?? null,
+        confirmed: parsed.confirmed ?? null,
+        probable: parsed.probable ?? null,
+        suspected: parsed.suspected ?? null,
+        deaths: parsed.deaths ?? null
+      },
+      risk: {
+        globalLow: Boolean(parsed.mentionsRiskLow),
+        shipModerate: Boolean(parsed.shipRiskModerate)
+      },
+      transmission: {
+        onboardHumanToHumanEvidence: Boolean(parsed.evidenceHumanToHuman)
+      }
+    };
+  }
+
+  if (source.roles?.includes("comparison-count")) {
+    return {
+      caseCounts: {
+        total: parsed.totalCases ?? null,
+        confirmed: parsed.confirmed ?? null,
+        probable: parsed.probable ?? null,
+        suspected: parsed.suspected ?? null,
+        deaths: parsed.deaths ?? null
+      },
+      risk: {
+        regionalVeryLow: Boolean(parsed.riskVeryLow)
+      },
+      travel: {
+        tenerifeMay10: Boolean(parsed.tenerifeMay10)
+      }
+    };
+  }
+
+  if (source.roles?.includes("us-risk")) {
+    return {
+      risk: {
+        usPublicExtremelyLow: Boolean(parsed.riskExtremelyLow)
+      },
+      travel: {
+        routineTravelNormal: Boolean(parsed.routineTravelNormal)
+      },
+      monitoring: {
+        symptoms4to42Days: Boolean(parsed.symptoms4to42Days)
+      },
+      cases: {
+        noUsOutbreakLinkedCases: Boolean(parsed.noUsCases)
+      }
+    };
+  }
+
+  if (source.roles?.includes("historical-count-check")) {
+    return {
+      caseCounts: {
+        total: parsed.totalCases ?? null,
+        confirmed: parsed.confirmed ?? null,
+        deaths: parsed.deaths ?? null
+      },
+      risk: {
+        globalLow: Boolean(parsed.riskLow)
+      }
+    };
+  }
+
+  return {};
+}
+
+const parserByKey = new Map([
+  ["who-don", parseWhoDon],
+  ["ecdc-daily", parseEcdc],
+  ["who-response", parseWhoResponse],
+  ["cdc-current", parseCdc]
+]);
+
+const sourceConfigs = sourceRegistry.sources
+  .filter((source) => source.pollable)
+  .map((source) => ({
+    id: source.id,
+    label: source.checkLabel ?? source.name,
+    tier: source.tier,
+    url: source.canonicalUrl,
+    parserKey: source.parserKey,
+    parser: parserByKey.get(source.parserKey),
+    baseline: source.baseline ?? {},
+    roles: source.roles ?? []
+  }));
+
+for (const source of sourceConfigs) {
+  if (!source.parser) {
+    throw new Error(`Missing parser for pollable source: ${source.id} (${source.parserKey ?? "no parserKey"})`);
+  }
+}
+
+function sourceIdByRole(role) {
+  return sourceRegistry.sources.find((source) => source.roles?.includes(role) && source.pollable)?.id ?? null;
+}
+
 function compareToBaseline(parsed, baseline = {}) {
   const changes = [];
   for (const [key, expected] of Object.entries(baseline)) {
@@ -219,9 +266,9 @@ function compareToBaseline(parsed, baseline = {}) {
 
 function classifySignals(results) {
   const byId = new Map(results.map((result) => [result.id, result.parsed]));
-  const who = byId.get("who-don") ?? {};
-  const ecdc = byId.get("ecdc-daily") ?? {};
-  const cdc = byId.get("cdc-current") ?? {};
+  const primaryCountSource = byId.get(sourceIdByRole("primary-count")) ?? {};
+  const comparisonCountSource = byId.get(sourceIdByRole("comparison-count")) ?? {};
+  const usRiskSource = byId.get(sourceIdByRole("us-risk")) ?? {};
   const warnings = results.flatMap((result) =>
     compareToBaseline(result.parsed, result.baseline).map((change) => ({
       sourceId: result.id,
@@ -231,18 +278,20 @@ function classifySignals(results) {
   );
 
   return {
-    officialRiskStillLow: Boolean(who.mentionsRiskLow && ecdc.riskVeryLow && cdc.riskExtremelyLow),
-    cdcNoUsCases: Boolean(cdc.noUsCases),
-    whoShipRiskModerate: Boolean(who.shipRiskModerate),
-    whoOnboardHumanToHumanEvidence: Boolean(who.evidenceHumanToHuman),
+    officialRiskStillLow: Boolean(
+      primaryCountSource.mentionsRiskLow && comparisonCountSource.riskVeryLow && usRiskSource.riskExtremelyLow
+    ),
+    cdcNoUsCases: Boolean(usRiskSource.noUsCases),
+    whoShipRiskModerate: Boolean(primaryCountSource.shipRiskModerate),
+    whoOnboardHumanToHumanEvidence: Boolean(primaryCountSource.evidenceHumanToHuman),
     sourceDisagreement:
-      who.confirmed !== undefined &&
-      ecdc.confirmed !== undefined &&
-      who.confirmed !== null &&
-      ecdc.confirmed !== null &&
-      who.confirmed !== ecdc.confirmed,
+      primaryCountSource.confirmed !== undefined &&
+      comparisonCountSource.confirmed !== undefined &&
+      primaryCountSource.confirmed !== null &&
+      comparisonCountSource.confirmed !== null &&
+      primaryCountSource.confirmed !== comparisonCountSource.confirmed,
     warnings,
-    humanReviewRequired: warnings.length > 0 || Boolean(who.evidenceHumanToHuman)
+    humanReviewRequired: warnings.length > 0 || Boolean(primaryCountSource.evidenceHumanToHuman)
   };
 }
 
@@ -254,16 +303,23 @@ async function fetchSource(source) {
   });
   const body = await response.text();
   const text = stripHtml(body);
+  const parsed = source.parser(text);
   return {
     id: source.id,
+    sourceId: source.id,
     label: source.label,
     tier: source.tier,
     url: source.url,
+    finalUrl: response.url,
     ok: response.ok,
     status: response.status,
+    fetchedAt: new Date().toISOString(),
+    parserKey: source.parserKey,
+    parserVersion: 1,
     contentHash: sha256(text),
     fetchedTextLength: text.length,
-    parsed: source.parser(text),
+    parsed,
+    facts: normalizeFacts(source, parsed),
     baseline: source.baseline
   };
 }
@@ -277,24 +333,36 @@ async function buildSnapshot() {
     } catch (error) {
       results.push({
         id: source.id,
+        sourceId: source.id,
         label: source.label,
         tier: source.tier,
         url: source.url,
+        finalUrl: source.url,
         ok: false,
         status: "fetch-error",
+        fetchedAt: checkedAt,
+        parserKey: source.parserKey,
+        parserVersion: 1,
         parsed: {},
+        facts: {},
         baseline: source.baseline,
         error: error instanceof Error ? error.message : String(error)
       });
     }
   }
-
-  return {
-    schemaVersion: 1,
+  const snapshot = {
+    schemaVersion: 2,
     checkedAt,
     results,
     signals: classifySignals(results)
   };
+  snapshot.status = {
+    fetchErrors: countFetchErrors(snapshot),
+    parserBlanks: countParserBlanks(snapshot),
+    snapshotReady: isStatusSnapshotReady(snapshot),
+    humanReviewRequired: snapshot.signals.humanReviewRequired
+  };
+  return snapshot;
 }
 
 async function ensureDir(path) {
@@ -319,7 +387,7 @@ function countParserBlanks(snapshot) {
   return snapshot.signals.warnings.filter((warning) => warning.type === "parser-blank").length;
 }
 
-function isPublishableSnapshot(snapshot) {
+function isStatusSnapshotReady(snapshot) {
   return countFetchErrors(snapshot) === 0 && countParserBlanks(snapshot) === 0;
 }
 
@@ -345,7 +413,7 @@ function formatHumanReviewReason(snapshot) {
 }
 
 function createDraftMarkdown(snapshot) {
-  const publishable = isPublishableSnapshot(snapshot);
+  const snapshotReady = isStatusSnapshotReady(snapshot);
   const lines = [
     `# Andes report update draft`,
     ``,
@@ -358,7 +426,7 @@ function createDraftMarkdown(snapshot) {
     `- WHO ship passenger/crew risk moderate: ${snapshot.signals.whoShipRiskModerate}`,
     `- WHO onboard human-to-human evidence language present: ${snapshot.signals.whoOnboardHumanToHumanEvidence}`,
     `- WHO/ECDC confirmed-count disagreement present: ${snapshot.signals.sourceDisagreement}`,
-    `- Publishable webpage snapshot: ${publishable}`,
+    `- Automated status snapshot ready: ${snapshotReady}`,
     ``,
     `## Parsed source snapshots`,
     ``
@@ -371,6 +439,7 @@ function createDraftMarkdown(snapshot) {
     lines.push(`- HTTP: ${result.status}`);
     lines.push(`- Content hash: ${result.contentHash ?? "n/a"}`);
     lines.push(`- Parsed: \`${JSON.stringify(result.parsed)}\``);
+    lines.push(`- Facts: \`${JSON.stringify(result.facts ?? {})}\``);
     const warnings = compareToBaseline(result.parsed, result.baseline);
     lines.push(`- Baseline warnings: ${warnings.length ? warnings.map((item) => item.message).join("; ") : "none"}`);
     lines.push(``);
@@ -383,7 +452,7 @@ function createDraftMarkdown(snapshot) {
   lines.push(``);
   lines.push(`## Suggested editor action`);
   lines.push(``);
-  if (!publishable) {
+  if (!snapshotReady) {
     lines.push(
       `- This run should stay audit-only: keep the timestamped snapshot and draft, but do not replace the public \`data/source-snapshots/latest.*\` files.`
     );
@@ -417,11 +486,11 @@ async function readSnapshotIndex() {
   try {
     return JSON.parse(await readFile(join(repoRoot, "data/source-snapshots/index.json"), "utf8"));
   } catch {
-    return { schemaVersion: 1, updatedAt: null, lastCheckedAt: null, snapshots: [] };
+    return { schemaVersion: 2, updatedAt: null, lastCheckedAt: null, snapshots: [] };
   }
 }
 
-async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, publishable = true) {
+async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, statusPublished = true) {
   const index = await readSnapshotIndex();
   const relativeSnapshotPath = snapshotPath.replace(`${repoRoot}/`, "");
   const relativeDraftPath = draftPath ? draftPath.replace(`${repoRoot}/`, "") : null;
@@ -433,7 +502,8 @@ async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, pub
     humanReviewRequired: snapshot.signals.humanReviewRequired,
     officialRiskStillLow: snapshot.signals.officialRiskStillLow,
     sourceDisagreement: snapshot.signals.sourceDisagreement,
-    publishable,
+    snapshotReady: snapshot.status.snapshotReady,
+    statusPublished,
     fetchErrors: countFetchErrors(snapshot),
     parserBlanks: countParserBlanks(snapshot)
   };
@@ -441,15 +511,15 @@ async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null, pub
     0,
     SNAPSHOT_RETENTION
   );
-  const updatedAt = publishable ? snapshot.checkedAt : index.updatedAt ?? null;
+  const updatedAt = statusPublished ? snapshot.checkedAt : index.updatedAt ?? null;
   await writeJson(join(repoRoot, "data/source-snapshots/index.json"), {
-    schemaVersion: 1,
+    schemaVersion: 2,
     updatedAt,
     lastCheckedAt: snapshot.checkedAt,
     snapshots
   });
   await writeJsData(join(repoRoot, "data/source-snapshots/index.js"), "SOURCE_SNAPSHOT_INDEX", {
-    schemaVersion: 1,
+    schemaVersion: 2,
     updatedAt,
     lastCheckedAt: snapshot.checkedAt,
     snapshots
@@ -486,7 +556,7 @@ async function pruneSnapshotArtifacts(snapshots) {
 }
 
 function printText(snapshot) {
-  const publishable = isPublishableSnapshot(snapshot);
+  const snapshotReady = isStatusSnapshotReady(snapshot);
   console.log(`# Andes-report news check`);
   console.log(`Checked at: ${snapshot.checkedAt}`);
   console.log("");
@@ -505,9 +575,9 @@ function printText(snapshot) {
     console.log("");
   }
 
-  const ecdc = snapshot.results.find((item) => item.id === "ecdc-daily")?.parsed ?? {};
-  const who = snapshot.results.find((item) => item.id === "who-don")?.parsed ?? {};
-  const cdc = snapshot.results.find((item) => item.id === "cdc-current")?.parsed ?? {};
+  const ecdc = snapshot.results.find((item) => item.id === sourceIdByRole("comparison-count"))?.parsed ?? {};
+  const who = snapshot.results.find((item) => item.id === sourceIdByRole("primary-count"))?.parsed ?? {};
+  const cdc = snapshot.results.find((item) => item.id === sourceIdByRole("us-risk"))?.parsed ?? {};
 
   console.log("## Signal summary");
   console.log(
@@ -530,11 +600,11 @@ function printText(snapshot) {
     }`
   );
   console.log(`- Human review required: ${snapshot.signals.humanReviewRequired}`);
-  console.log(`- Publishable webpage snapshot: ${publishable}`);
+  console.log(`- Automated status snapshot ready: ${snapshotReady}`);
   console.log(
     "- Manual next step: if counts changed or risk text is no longer low/very low/extremely low, update data/incident-data.js and re-check the relationship chain before changing the narrative."
   );
-  if (!publishable) {
+  if (!snapshotReady) {
     console.log(
       "- Publication note: timestamped audit artifacts can be saved, but the public latest source snapshot should stay on the last successful run."
     );
@@ -552,20 +622,20 @@ function parseArgs(argv) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const snapshot = await buildSnapshot();
-  const publishable = isPublishableSnapshot(snapshot);
+  const snapshotReady = isStatusSnapshotReady(snapshot);
 
   if (args.mode === "snapshot") {
     const snapshotPath = await saveTimestampedSnapshot(snapshot);
-    const latestPath = publishable ? await publishLatestSnapshot(snapshot) : null;
-    await updateSnapshotIndex(snapshot, snapshotPath, null, publishable);
+    const latestPath = snapshotReady ? await publishLatestSnapshot(snapshot) : null;
+    await updateSnapshotIndex(snapshot, snapshotPath, null, snapshotReady);
     if (args.json) {
-      console.log(JSON.stringify({ ...snapshot, snapshotPath, latestPath, publishable }, null, 2));
+      console.log(JSON.stringify({ ...snapshot, snapshotPath, latestPath, snapshotReady }, null, 2));
     } else {
       printText(snapshot);
       console.log("");
       console.log(`Saved snapshot: ${snapshotPath}`);
       console.log(
-        publishable
+        snapshotReady
           ? `Updated latest: ${latestPath}`
           : "Skipped latest snapshot publish because this run had fetch/parser failures."
       );
@@ -576,17 +646,17 @@ async function main() {
   if (args.mode === "update-draft") {
     const snapshotPath = await saveTimestampedSnapshot(snapshot);
     const draftPath = await saveDraft(snapshot);
-    const latestPath = publishable ? await publishLatestSnapshot(snapshot) : null;
-    await updateSnapshotIndex(snapshot, snapshotPath, draftPath, publishable);
+    const latestPath = snapshotReady ? await publishLatestSnapshot(snapshot) : null;
+    await updateSnapshotIndex(snapshot, snapshotPath, draftPath, snapshotReady);
     if (args.json) {
-      console.log(JSON.stringify({ ...snapshot, snapshotPath, latestPath, draftPath, publishable }, null, 2));
+      console.log(JSON.stringify({ ...snapshot, snapshotPath, latestPath, draftPath, snapshotReady }, null, 2));
     } else {
       printText(snapshot);
       console.log("");
       console.log(`Saved snapshot: ${snapshotPath}`);
       console.log(`Saved draft: ${draftPath}`);
       console.log(
-        publishable
+        snapshotReady
           ? `Updated latest: ${latestPath}`
           : "Skipped latest snapshot publish because this run had fetch/parser failures."
       );

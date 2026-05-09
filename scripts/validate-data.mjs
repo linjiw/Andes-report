@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
+import { readFile } from "node:fs/promises";
+
 globalThis.window = globalThis;
 await import("../data/incident-data.js");
 
 const data = globalThis.INCIDENT_DATA;
+const sourceRegistry = JSON.parse(await readFile(new URL("../data/source-registry.json", import.meta.url), "utf8"));
 const errors = [];
 
 function assert(condition, message) {
@@ -17,6 +20,7 @@ assert(Array.isArray(data.sourceSnapshots), "sourceSnapshots must be an array");
 
 const sourceMap = new Map(data.sources.map((source) => [source.id, source]));
 const sourceIds = new Set(sourceMap.keys());
+const registryMap = new Map(sourceRegistry.sources.map((source) => [source.id, source]));
 
 function checkIds(ids = [], path) {
   for (const id of ids) {
@@ -37,24 +41,34 @@ for (let index = 1; index < data.events.length; index += 1) {
   assert(prev <= current, `events are not sorted at index ${index}: ${prev} > ${current}`);
 }
 
-const whoSnapshot = data.sourceSnapshots.find((snapshot) => snapshot.source.includes("WHO"));
-const ecdcSnapshot = data.sourceSnapshots.find((snapshot) => snapshot.source.includes("ECDC"));
+const primaryCountSourceId =
+  sourceRegistry.sources.find((source) => source.roles?.includes("primary-count") && source.active)?.id ?? null;
+const comparisonCountSourceId =
+  sourceRegistry.sources.find((source) => source.roles?.includes("comparison-count") && source.active)?.id ?? null;
+
+const whoSnapshot = data.sourceSnapshots.find((snapshot) => snapshot.sourceIds?.[0] === primaryCountSourceId);
+const ecdcSnapshot = data.sourceSnapshots.find((snapshot) => snapshot.sourceIds?.[0] === comparisonCountSourceId);
 assert(whoSnapshot, "WHO source snapshot is required");
 assert(ecdcSnapshot, "ECDC source snapshot is required");
 
-const sourceOrgAliases = [
-  ["WHO", "WHO"],
-  ["ECDC", "ECDC"],
-  ["CDC", "CDC"],
-  ["Reuters", "Reuters"],
-  ["AP", "AP"]
-];
+for (const source of data.sources) {
+  const registrySource = registryMap.get(source.id);
+  assert(registrySource, `data.sources contains id missing from source-registry.json: ${source.id}`);
+  if (!registrySource) continue;
+  assert(source.org === registrySource.org, `data.sources ${source.id} org drift: ${source.org} !== ${registrySource.org}`);
+  assert(
+    source.priority === registrySource.priority,
+    `data.sources ${source.id} priority drift: ${source.priority} !== ${registrySource.priority}`
+  );
+  assert(source.name === registrySource.name, `data.sources ${source.id} name drift`);
+  assert(source.url === registrySource.canonicalUrl, `data.sources ${source.id} url drift`);
+}
 
 for (const [index, snapshot] of data.sourceSnapshots.entries()) {
   const primaryId = snapshot.sourceIds?.[0];
   const primarySource = sourceMap.get(primaryId);
   assert(primarySource, `sourceSnapshots[${index}] missing primary source`);
-  const expectedOrg = sourceOrgAliases.find(([label]) => snapshot.source.includes(label))?.[1];
+  const expectedOrg = registryMap.get(primaryId)?.org;
   if (expectedOrg && primarySource) {
     assert(
       primarySource.org === expectedOrg,

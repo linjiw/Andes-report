@@ -13,7 +13,7 @@ Maintain this repo as a source-traceable, signal-driven public health tracker fo
 
 1. Read [docs/NEWS_UPDATE_PLAYBOOK.md](../../../docs/NEWS_UPDATE_PLAYBOOK.md).
 2. Run `npm run check-news`.
-3. Run `npm run draft-update` when an auditable source snapshot and editor-facing draft should be saved, or `npm run update-news` for the full scheduled refresh path.
+3. Run `npm run draft-update` when an auditable source snapshot and editor-facing draft should be saved, `npm run update-news` for the full scheduled refresh path, or `npm run framework-review` for the daily meta-review loop.
 4. Verify official pages directly when the script detects count or risk-language changes, or when fetch/parser failures make the saved draft audit-only.
 5. Update `data/incident-data.js` first, then mirror durable rows in `data/events.csv` and `data/sources.csv` in the same run; do not stop at a draft if the source change is clear.
 6. Treat those data-file edits as the webpage update. The dashboard, sources page, and history page read repo data directly, so there is no extra manual HTML sync step for routine source refreshes.
@@ -31,6 +31,8 @@ In the scheduled GitHub automation path, commit and push validated generated sna
 Only let a successful, publishable official-source check replace `data/source-snapshots/latest.*`. Keep failed fetch/parser runs as timestamped audit artifacts without pushing them into the public latest snapshot.
 
 Make sure the homepage exposes whether the curated dashboard is aligned with the latest successful official check. If only snapshots/history were refreshed, label that honestly instead of implying the narrative was fully auto-updated.
+
+When the task is framework hardening instead of a normal source refresh, use the repo-local `andes-framework-review` skill and parallel subagents rather than treating it as a routine data update.
 
 ## Source Policy
 
@@ -110,3 +112,5 @@ Require human review before treating a change as publish-ready when it changes:
 - risk level
 - travel or quarantine guidance
 - symptom or care-seeking guidance
+
+This gate applies to curated dashboard interpretation and copy. It does not forbid publishing clearly labeled audit/status artifacts that say the latest official check still needs review.

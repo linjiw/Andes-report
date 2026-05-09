@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: andes-news-check
+  cancel-in-progress: true
+
 jobs:
   news-check:
     runs-on: ubuntu-latest
@@ -26,6 +30,24 @@ jobs:
       - name: Update organized news artifacts
         run: npm run update-news
 
+      - name: Fail on unexpected tracked file changes
+        run: |
+          CHANGED=$(git status --short --untracked-files=no | awk '{print $2}' | grep -v '^data/source-snapshots/' | grep -v '^data/update-drafts/' || true)
+          if [ -n "${CHANGED}" ]; then
+            echo "Unexpected tracked file changes from scheduled update-news run:"
+            echo "${CHANGED}"
+            exit 1
+          fi
+
+      - name: Upload audit artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: andes-news-check-artifacts
+          path: |
+            data/source-snapshots
+            data/update-drafts
+
       - name: Commit and push news refresh
         run: |
           if git diff --quiet && git diff --cached --quiet; then
@@ -42,10 +64,5 @@ jobs:
             exit 0
           fi
           git commit -m "Automated news refresh ${RUN_AT}"
-          for attempt in 1 2 3; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin HEAD:${GITHUB_REF_NAME} && exit 0
-            echo "Push attempt ${attempt} failed; retrying."
-            sleep 5
-          done
-          echo "Unable to push automated news refresh after retries."
-          exit 1
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:${GITHUB_REF_NAME}
