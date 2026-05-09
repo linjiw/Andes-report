@@ -13,16 +13,14 @@ Maintain this repo as a source-traceable, signal-driven public health tracker fo
 
 1. Read [docs/NEWS_UPDATE_PLAYBOOK.md](../../../docs/NEWS_UPDATE_PLAYBOOK.md).
 2. Run `npm run check-news`.
-3. Verify official pages directly when the script detects count or risk-language changes.
-4. Update `data/incident-data.js` first, then mirror durable rows in `data/events.csv` and `data/sources.csv`.
-5. Rewrite Chinese copy so it separates fact, interpretation, and uncertainty.
-6. Validate with:
+3. Run `npm run draft-update` when an auditable source snapshot and editor-facing draft should be saved.
+4. Verify official pages directly when the script detects count or risk-language changes.
+5. Update `data/incident-data.js` first, then mirror durable rows in `data/events.csv` and `data/sources.csv`.
+6. Rewrite Chinese copy so it separates fact, interpretation, and uncertainty.
+7. Validate with:
 
 ```bash
-node --check app.js
-node --check data/incident-data.js
-node --check scripts/check-news.mjs
-npm run check-news
+npm run validate
 ```
 
 ## Source Policy

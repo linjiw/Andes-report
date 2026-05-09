@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sources | MV Hondius Andes Hantavirus 事件追踪</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Sources</p>
+        <h1>来源注册表</h1>
+        <p class="dek">这里列出当前用于页面事实、病例快照、风险信号和行动进展的来源。Tier 1 官方来源优先。</p>
+      </div>
+      <div class="asof">
+        <span>数据版本</span>
+        <strong id="sourceAsOf">-</strong>
+        <span id="sourceVersion">-</span>
+      </div>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="./index.html">Dashboard</a>
+        <a href="./methodology.html">Methodology</a>
+        <a href="./sources.html" aria-current="page">Sources</a>
+        <a href="./history.html">Update history</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Official snapshots</p>
+            <h2>当前官方口径</h2>
+          </div>
+          <span class="source-pill">Source disagreement aware</span>
+        </div>
+        <div id="sourceSnapshotList" class="snapshot-grid"></div>
+      </section>
+
+      <section class="panel sources-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Registry</p>
+            <h2>来源列表</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>优先级</th>
+                <th>来源</th>
+                <th>日期</th>
+                <th>用途</th>
+                <th>链接</th>
+              </tr>
+            </thead>
+            <tbody id="sourceRegistryRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data/incident-data.js"></script>
+    <script>
+      const data = window.INCIDENT_DATA;
+      document.querySelector("#sourceAsOf").textContent = data.meta.asOf;
+      document.querySelector("#sourceVersion").textContent = data.meta.dataVersion;
+
+      document.querySelector("#sourceSnapshotList").innerHTML = data.sourceSnapshots
+        .map(
+          (snapshot) => `
+            <article class="snapshot-card">
+              <h3>${snapshot.source}</h3>
+              <span class="snapshot-date">${snapshot.date}</span>
+              <div class="snapshot-counts">
+                <span><strong>${snapshot.total ?? "—"}</strong>报告病例</span>
+                <span><strong>${snapshot.confirmed ?? "—"}</strong>确诊</span>
+                <span><strong>${snapshot.probable ?? "—"}</strong>可能</span>
+                <span><strong>${snapshot.suspected ?? "—"}</strong>疑似</span>
+                <span><strong>${snapshot.nonCases ?? "—"}</strong>非病例</span>
+                <span><strong>${snapshot.deaths ?? "—"}</strong>死亡</span>
+              </div>
+              <p><strong>风险：</strong>${snapshot.publicRisk}</p>
+              <p>${snapshot.note}</p>
+            </article>
+          `
+        )
+        .join("");
+
+      document.querySelector("#sourceRegistryRows").innerHTML = data.sources
+        .map(
+          (source) => `
+            <tr>
+              <td>${source.priority}</td>
+              <td><strong>${source.org}</strong><br>${source.name}</td>
+              <td>${source.date}</td>
+              <td>${source.useFor}</td>
+              <td><a href="${source.url}" target="_blank" rel="noreferrer">打开</a></td>
+            </tr>
+          `
+        )
+        .join("");
+    </script>
+  </body>
+</html>

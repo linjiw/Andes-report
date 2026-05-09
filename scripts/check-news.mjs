@@ -1,10 +1,19 @@
 #!/usr/bin/env node
 
-const sources = [
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
+
+const sourceConfigs = [
   {
     id: "who-don",
     label: "WHO Disease Outbreak News latest",
+    tier: 1,
     url: "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+    parser: parseWhoDon,
     baseline: {
       totalCases: 8,
       confirmed: 6,
@@ -16,7 +25,9 @@ const sources = [
   {
     id: "ecdc-daily",
     label: "ECDC daily update",
+    tier: 1,
     url: "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+    parser: parseEcdc,
     baseline: {
       totalCases: 8,
       confirmed: 5,
@@ -28,7 +39,9 @@ const sources = [
   {
     id: "who-response",
     label: "WHO response update, historical",
+    tier: 1,
     url: "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
+    parser: parseWhoResponse,
     baseline: {
       totalCases: 8,
       confirmed: 5,
@@ -38,7 +51,15 @@ const sources = [
   {
     id: "cdc-current",
     label: "CDC current situation",
-    url: "https://www.cdc.gov/hantavirus/situation-summary/index.html"
+    tier: 1,
+    url: "https://www.cdc.gov/hantavirus/situation-summary/index.html",
+    parser: parseCdc,
+    baseline: {
+      riskExtremelyLow: true,
+      noUsCases: true,
+      routineTravelNormal: true,
+      symptoms4to42Days: true
+    }
   }
 ];
 
@@ -62,8 +83,19 @@ function stripHtml(html) {
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
+    .replace(/&ldquo;/g, "\"")
+    .replace(/&rdquo;/g, "\"")
+    .replace(/&rsquo;/g, "'")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function sha256(value) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+function slugTimestamp(iso) {
+  return iso.replace(/[:.]/g, "-");
 }
 
 function asNumber(value) {
@@ -125,7 +157,9 @@ function parseWhoDon(text) {
       /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+cases have been laboratory-confirmed/i,
       /\((\d+)\s+confirmed and\s+\d+\s+probable cases\)/i
     ]),
-    probable: matchNumber(text, [/(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+probable cases/i]),
+    probable: matchNumber(text, [
+      /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+probable cases/i
+    ]),
     suspected: matchNumber(text, [/(\d+)\s+suspected cases/i]) ?? 0,
     deaths: matchNumber(text, [
       /including\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+deaths/i,
@@ -149,15 +183,48 @@ function parseCdc(text) {
   };
 }
 
-function compareCounts(parsed, baseline) {
+function compareToBaseline(parsed, baseline = {}) {
   const changes = [];
-  if (!baseline) return changes;
   for (const [key, expected] of Object.entries(baseline)) {
     if (parsed[key] !== null && parsed[key] !== undefined && parsed[key] !== expected) {
-      changes.push(`${key}: baseline ${expected}, page ${parsed[key]}`);
+      changes.push({
+        key,
+        expected,
+        observed: parsed[key],
+        message: `${key}: baseline ${expected}, page ${parsed[key]}`
+      });
     }
   }
   return changes;
+}
+
+function classifySignals(results) {
+  const byId = new Map(results.map((result) => [result.id, result.parsed]));
+  const who = byId.get("who-don") ?? {};
+  const ecdc = byId.get("ecdc-daily") ?? {};
+  const cdc = byId.get("cdc-current") ?? {};
+  const warnings = results.flatMap((result) =>
+    compareToBaseline(result.parsed, result.baseline).map((change) => ({
+      sourceId: result.id,
+      sourceLabel: result.label,
+      ...change
+    }))
+  );
+
+  return {
+    officialRiskStillLow: Boolean(who.mentionsRiskLow && ecdc.riskVeryLow && cdc.riskExtremelyLow),
+    cdcNoUsCases: Boolean(cdc.noUsCases),
+    whoShipRiskModerate: Boolean(who.shipRiskModerate),
+    whoOnboardHumanToHumanEvidence: Boolean(who.evidenceHumanToHuman),
+    sourceDisagreement:
+      who.confirmed !== undefined &&
+      ecdc.confirmed !== undefined &&
+      who.confirmed !== null &&
+      ecdc.confirmed !== null &&
+      who.confirmed !== ecdc.confirmed,
+    warnings,
+    humanReviewRequired: warnings.length > 0 || Boolean(who.evidenceHumanToHuman)
+  };
 }
 
 async function fetchSource(source) {
@@ -167,71 +234,196 @@ async function fetchSource(source) {
     }
   });
   const body = await response.text();
+  const text = stripHtml(body);
   return {
-    ...source,
+    id: source.id,
+    label: source.label,
+    tier: source.tier,
+    url: source.url,
     ok: response.ok,
     status: response.status,
-    text: stripHtml(body)
+    contentHash: sha256(text),
+    fetchedTextLength: text.length,
+    parsed: source.parser(text),
+    baseline: source.baseline
   };
 }
 
-async function main() {
+async function buildSnapshot() {
+  const checkedAt = new Date().toISOString();
   const results = [];
-  for (const source of sources) {
+  for (const source of sourceConfigs) {
     try {
-      const fetched = await fetchSource(source);
-      let parsed = {};
-      if (source.id === "ecdc-daily") parsed = parseEcdc(fetched.text);
-      if (source.id === "who-response") parsed = parseWhoResponse(fetched.text);
-      if (source.id === "who-don") parsed = parseWhoDon(fetched.text);
-      if (source.id === "cdc-current") parsed = parseCdc(fetched.text);
-      results.push({ ...fetched, parsed });
+      results.push(await fetchSource(source));
     } catch (error) {
       results.push({
-        ...source,
+        id: source.id,
+        label: source.label,
+        tier: source.tier,
+        url: source.url,
         ok: false,
         status: "fetch-error",
         parsed: {},
+        baseline: source.baseline,
         error: error instanceof Error ? error.message : String(error)
       });
     }
   }
 
-  const jsonMode = process.argv.includes("--json");
-  if (jsonMode) {
-    console.log(
-      JSON.stringify(
-        {
-          checkedAt: new Date().toISOString(),
-          results: results.map(({ text, ...result }) => result)
-        },
-        null,
-        2
-      )
-    );
-    return;
+  return {
+    schemaVersion: 1,
+    checkedAt,
+    results,
+    signals: classifySignals(results)
+  };
+}
+
+async function ensureDir(path) {
+  await mkdir(path, { recursive: true });
+}
+
+async function writeJson(path, value) {
+  await ensureDir(dirname(path));
+  await writeFile(path, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+async function writeJsData(path, globalName, value) {
+  await ensureDir(dirname(path));
+  await writeFile(path, `window.${globalName} = ${JSON.stringify(value, null, 2)};\n`);
+}
+
+async function saveSnapshot(snapshot) {
+  const fileName = `${slugTimestamp(snapshot.checkedAt)}.json`;
+  const snapshotPath = join(repoRoot, "data/source-snapshots", fileName);
+  const latestPath = join(repoRoot, "data/source-snapshots/latest.json");
+  await writeJson(snapshotPath, snapshot);
+  await writeJson(latestPath, snapshot);
+  await writeJsData(join(repoRoot, "data/source-snapshots/latest.js"), "LATEST_SOURCE_SNAPSHOT", snapshot);
+  return { snapshotPath, latestPath };
+}
+
+function formatHumanReviewReason(snapshot) {
+  const reasons = [];
+  if (snapshot.signals.warnings.length) reasons.push("baseline count or risk-language change");
+  if (snapshot.signals.whoOnboardHumanToHumanEvidence) reasons.push("transmission assessment wording");
+  return reasons.length ? reasons.join("; ") : "none";
+}
+
+function createDraftMarkdown(snapshot) {
+  const lines = [
+    `# Andes report update draft`,
+    ``,
+    `Checked at: ${snapshot.checkedAt}`,
+    ``,
+    `## Official-source status`,
+    ``,
+    `- WHO public risk still low: ${snapshot.signals.officialRiskStillLow}`,
+    `- CDC reports no U.S. cases from this outbreak: ${snapshot.signals.cdcNoUsCases}`,
+    `- WHO ship passenger/crew risk moderate: ${snapshot.signals.whoShipRiskModerate}`,
+    `- WHO onboard human-to-human evidence language present: ${snapshot.signals.whoOnboardHumanToHumanEvidence}`,
+    `- WHO/ECDC confirmed-count disagreement present: ${snapshot.signals.sourceDisagreement}`,
+    ``,
+    `## Parsed source snapshots`,
+    ``
+  ];
+
+  for (const result of snapshot.results) {
+    lines.push(`### ${result.label}`);
+    lines.push(``);
+    lines.push(`- URL: ${result.url}`);
+    lines.push(`- HTTP: ${result.status}`);
+    lines.push(`- Content hash: ${result.contentHash ?? "n/a"}`);
+    lines.push(`- Parsed: \`${JSON.stringify(result.parsed)}\``);
+    const warnings = compareToBaseline(result.parsed, result.baseline);
+    lines.push(`- Baseline warnings: ${warnings.length ? warnings.map((item) => item.message).join("; ") : "none"}`);
+    lines.push(``);
   }
 
+  lines.push(`## Human review`);
+  lines.push(``);
+  lines.push(`Required: ${snapshot.signals.humanReviewRequired}`);
+  lines.push(`Reason: ${formatHumanReviewReason(snapshot)}`);
+  lines.push(``);
+  lines.push(`## Suggested editor action`);
+  lines.push(``);
+  if (snapshot.signals.warnings.length) {
+    lines.push(`- Open the official source(s) with baseline warnings and decide whether to update data/incident-data.js.`);
+  } else {
+    lines.push(`- No count or risk baseline changes detected. Keep the published dashboard unchanged unless editorial wording needs cleanup.`);
+  }
+  if (snapshot.signals.sourceDisagreement) {
+    lines.push(`- Preserve WHO and ECDC as separate sourceSnapshots; do not merge their confirmed-case counts.`);
+  }
+  lines.push(`- Run validation before publishing: \`npm run validate\`.`);
+  lines.push(``);
+
+  return `${lines.join("\n")}\n`;
+}
+
+async function saveDraft(snapshot) {
+  const fileName = `${slugTimestamp(snapshot.checkedAt)}.md`;
+  const draftPath = join(repoRoot, "data/update-drafts", fileName);
+  await ensureDir(dirname(draftPath));
+  await writeFile(draftPath, createDraftMarkdown(snapshot));
+  return draftPath;
+}
+
+async function readSnapshotIndex() {
+  try {
+    return JSON.parse(await readFile(join(repoRoot, "data/source-snapshots/index.json"), "utf8"));
+  } catch {
+    return { schemaVersion: 1, snapshots: [] };
+  }
+}
+
+async function updateSnapshotIndex(snapshot, snapshotPath, draftPath = null) {
+  const index = await readSnapshotIndex();
+  const relativeSnapshotPath = snapshotPath.replace(`${repoRoot}/`, "");
+  const relativeDraftPath = draftPath ? draftPath.replace(`${repoRoot}/`, "") : null;
+  const nextEntry = {
+    checkedAt: snapshot.checkedAt,
+    path: relativeSnapshotPath,
+    draftPath: relativeDraftPath,
+    warnings: snapshot.signals.warnings.length,
+    humanReviewRequired: snapshot.signals.humanReviewRequired,
+    officialRiskStillLow: snapshot.signals.officialRiskStillLow,
+    sourceDisagreement: snapshot.signals.sourceDisagreement
+  };
+  const snapshots = [nextEntry, ...index.snapshots.filter((item) => item.path !== relativeSnapshotPath)].slice(0, 50);
+  await writeJson(join(repoRoot, "data/source-snapshots/index.json"), {
+    schemaVersion: 1,
+    updatedAt: snapshot.checkedAt,
+    snapshots
+  });
+  await writeJsData(join(repoRoot, "data/source-snapshots/index.js"), "SOURCE_SNAPSHOT_INDEX", {
+    schemaVersion: 1,
+    updatedAt: snapshot.checkedAt,
+    snapshots
+  });
+}
+
+function printText(snapshot) {
   console.log(`# Andes-report news check`);
-  console.log(`Checked at: ${new Date().toISOString()}`);
+  console.log(`Checked at: ${snapshot.checkedAt}`);
   console.log("");
 
-  for (const result of results) {
+  for (const result of snapshot.results) {
     console.log(`## ${result.label}`);
     console.log(`URL: ${result.url}`);
     console.log(`HTTP: ${result.status}`);
     if (result.error) console.log(`Error: ${result.error}`);
+    console.log(`Content hash: ${result.contentHash ?? "n/a"}`);
     console.log(`Parsed: ${JSON.stringify(result.parsed)}`);
-    const changes = compareCounts(result.parsed, result.baseline);
+    const changes = compareToBaseline(result.parsed, result.baseline);
     if (changes.length) {
-      console.log(`Count change warning: ${changes.join("; ")}`);
+      console.log(`Count change warning: ${changes.map((change) => change.message).join("; ")}`);
     }
     console.log("");
   }
 
-  const ecdc = results.find((item) => item.id === "ecdc-daily")?.parsed ?? {};
-  const who = results.find((item) => item.id === "who-don")?.parsed ?? {};
-  const cdc = results.find((item) => item.id === "cdc-current")?.parsed ?? {};
+  const ecdc = snapshot.results.find((item) => item.id === "ecdc-daily")?.parsed ?? {};
+  const who = snapshot.results.find((item) => item.id === "who-don")?.parsed ?? {};
+  const cdc = snapshot.results.find((item) => item.id === "cdc-current")?.parsed ?? {};
 
   console.log("## Signal summary");
   console.log(
@@ -253,9 +445,59 @@ async function main() {
       ecdc.deaths ?? "unknown"
     }`
   );
+  console.log(`- Human review required: ${snapshot.signals.humanReviewRequired}`);
   console.log(
     "- Manual next step: if counts changed or risk text is no longer low/very low/extremely low, update data/incident-data.js and re-check the relationship chain before changing the narrative."
   );
+}
+
+function parseArgs(argv) {
+  const mode = argv.find((arg) => ["check", "snapshot", "update-draft"].includes(arg)) ?? "check";
+  return {
+    mode,
+    json: argv.includes("--json")
+  };
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  const snapshot = await buildSnapshot();
+
+  if (args.mode === "snapshot") {
+    const saved = await saveSnapshot(snapshot);
+    await updateSnapshotIndex(snapshot, saved.snapshotPath);
+    if (args.json) {
+      console.log(JSON.stringify({ ...snapshot, saved }, null, 2));
+    } else {
+      printText(snapshot);
+      console.log("");
+      console.log(`Saved snapshot: ${saved.snapshotPath}`);
+      console.log(`Saved latest: ${saved.latestPath}`);
+    }
+    return;
+  }
+
+  if (args.mode === "update-draft") {
+    const saved = await saveSnapshot(snapshot);
+    const draftPath = await saveDraft(snapshot);
+    await updateSnapshotIndex(snapshot, saved.snapshotPath, draftPath);
+    if (args.json) {
+      console.log(JSON.stringify({ ...snapshot, saved, draftPath }, null, 2));
+    } else {
+      printText(snapshot);
+      console.log("");
+      console.log(`Saved snapshot: ${saved.snapshotPath}`);
+      console.log(`Saved draft: ${draftPath}`);
+    }
+    return;
+  }
+
+  if (args.json) {
+    console.log(JSON.stringify(snapshot, null, 2));
+    return;
+  }
+
+  printText(snapshot);
 }
 
 main().catch((error) => {

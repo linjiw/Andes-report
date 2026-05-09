@@ -1,6 +1,6 @@
 # Hantavirus Signal Tracker Design Plan
 
-Status: Draft v1.1  
+Status: Draft v1.2  
 Last updated: 2026-05-09  
 Scope: MV Hondius / Andes virus tracker first, extensible to other emerging infectious disease events.
 
@@ -129,6 +129,11 @@ Current repo:
 - Structured data in `data/incident-data.js`.
 - CSV exports in `data/events.csv` and `data/sources.csv`.
 - Official-source checker in `scripts/check-news.mjs`.
+- Timestamped source snapshots in `data/source-snapshots/`.
+- Generated update drafts in `data/update-drafts/`.
+- Static methodology, sources, and update-history pages.
+- Repo-local Codex skill in `.codex/skills/andes-report-updater`.
+- App-level recurring automations for 6-hour news checks and weekly editorial review.
 
 MVP backend direction:
 
@@ -169,6 +174,9 @@ Phase 0:
 - Update playbook.
 - Risk signal rules.
 - Static dashboard.
+- Static methodology/sources/history pages.
+- Snapshot and draft-update pipeline.
+- CI data validation.
 
 Phase 1:
 
@@ -176,6 +184,8 @@ Phase 1:
 - Source snapshots and disagreement display.
 - Human-reviewed update workflow.
 - RSS output.
+- Public correction/disclaimer pages.
+- Deployment target.
 
 Phase 2:
 
@@ -183,6 +193,27 @@ Phase 2:
 - Email digest.
 - Map and timeline pages.
 - Public methodology page.
+
+## Implementation Progress
+
+Completed by 2026-05-09:
+
+- Static dashboard with source-aware metrics, timeline, route context, monitoring windows, and red/green signal cards.
+- WHO DON600 / ECDC / CDC source snapshots displayed side by side.
+- `npm run check-news`, `npm run snapshot-news`, and `npm run draft-update`.
+- Data integrity validator and GitHub Actions workflow.
+- Repo-local update skill and two active Codex app automations.
+- Private GitHub repository on `main`.
+
+Not complete yet:
+
+- Production deployment.
+- RSS feed.
+- Email subscriptions.
+- Backend database and CMS.
+- Map visualization.
+- Article/explainer content workflow.
+- Multi-pathogen data model.
 
 Phase 3:
 

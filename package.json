@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check-news": "node scripts/check-news.mjs"
+    "check-news": "node scripts/check-news.mjs check",
+    "snapshot-news": "node scripts/check-news.mjs snapshot",
+    "draft-update": "node scripts/check-news.mjs update-draft",
+    "validate": "node --check app.js && node --check data/incident-data.js && node --check scripts/check-news.mjs && node scripts/validate-data.mjs && npm run check-news"
   }
 }

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Update History | MV Hondius Andes Hantavirus 事件追踪</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Update history</p>
+        <h1>自动化检查记录</h1>
+        <p class="dek">这里显示官方来源检查的快照索引。每次运行都会保存来源 hash、解析结果和是否需要人工复核。</p>
+      </div>
+      <div class="asof">
+        <span>最近检查</span>
+        <strong id="historyUpdatedAt">-</strong>
+        <span>source snapshot</span>
+      </div>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="./index.html">Dashboard</a>
+        <a href="./methodology.html">Methodology</a>
+        <a href="./sources.html">Sources</a>
+        <a href="./history.html" aria-current="page">Update history</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Latest check</p>
+            <h2>最近一次解析结果</h2>
+          </div>
+          <span class="source-pill">human review gate</span>
+        </div>
+        <div id="latestSnapshot" class="snapshot-grid"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Snapshots</p>
+            <h2>快照索引</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>检查时间</th>
+                <th>风险仍低</th>
+                <th>来源差异</th>
+                <th>警告数</th>
+                <th>人工复核</th>
+                <th>路径</th>
+              </tr>
+            </thead>
+            <tbody id="snapshotRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data/source-snapshots/index.js"></script>
+    <script src="./data/source-snapshots/latest.js"></script>
+    <script>
+      const index = window.SOURCE_SNAPSHOT_INDEX;
+      const latest = window.LATEST_SOURCE_SNAPSHOT;
+      const formatDateTime = (value) => new Intl.DateTimeFormat("zh-CN", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(new Date(value));
+
+      document.querySelector("#historyUpdatedAt").textContent = formatDateTime(index.updatedAt);
+
+      document.querySelector("#latestSnapshot").innerHTML = latest.results
+        .map(
+          (result) => `
+            <article class="snapshot-card">
+              <h3>${result.label}</h3>
+              <span class="snapshot-date">HTTP ${result.status} · hash ${result.contentHash?.slice(0, 12) ?? "n/a"}</span>
+              <p><strong>Parsed:</strong> ${JSON.stringify(result.parsed)}</p>
+              <p><a href="${result.url}" target="_blank" rel="noreferrer">打开官方来源</a></p>
+            </article>
+          `
+        )
+        .join("");
+
+      document.querySelector("#snapshotRows").innerHTML = index.snapshots
+        .map(
+          (item) => `
+            <tr>
+              <td>${formatDateTime(item.checkedAt)}</td>
+              <td>${item.officialRiskStillLow ? "是" : "否"}</td>
+              <td>${item.sourceDisagreement ? "是" : "否"}</td>
+              <td>${item.warnings}</td>
+              <td>${item.humanReviewRequired ? "需要" : "不需要"}</td>
+              <td><code>${item.path}</code></td>
+            </tr>
+          `
+        )
+        .join("");
+    </script>
+  </body>
+</html>

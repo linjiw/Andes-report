@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-05-09T08:26:41.215Z",
+  "results": [
+    {
+      "id": "who-don",
+      "label": "WHO Disease Outbreak News latest",
+      "tier": 1,
+      "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "ok": true,
+      "status": 200,
+      "contentHash": "6b9d722c0405ea8290eae26b60726480650fb6941c144f903fec0197bdb21702",
+      "fetchedTextLength": 30962,
+      "parsed": {
+        "totalCases": 8,
+        "confirmed": 6,
+        "probable": 2,
+        "suspected": 0,
+        "deaths": 3,
+        "mentionsRiskLow": true,
+        "shipRiskModerate": true,
+        "mentions147": true,
+        "evidenceHumanToHuman": true
+      },
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 6,
+        "probable": 2,
+        "suspected": 0,
+        "deaths": 3
+      }
+    },
+    {
+      "id": "ecdc-daily",
+      "label": "ECDC daily update",
+      "tier": 1,
+      "url": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+      "ok": true,
+      "status": 200,
+      "contentHash": "d6908c00e2431577d37cc9993dc1d5e62bcdd4dbbbb91e4a4a2e97e8d6365ad8",
+      "fetchedTextLength": 4516,
+      "parsed": {
+        "totalCases": 8,
+        "confirmed": 5,
+        "probable": 2,
+        "suspected": 1,
+        "deaths": 3,
+        "riskVeryLow": true,
+        "tenerifeMay10": true
+      },
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 5,
+        "probable": 2,
+        "suspected": 1,
+        "deaths": 3
+      }
+    },
+    {
+      "id": "who-response",
+      "label": "WHO response update, historical",
+      "tier": 1,
+      "url": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
+      "ok": true,
+      "status": 200,
+      "contentHash": "4df5171c9e25ad3a28fd634954c0be6143eae546530c96170b34e58e337b372b",
+      "fetchedTextLength": 5226,
+      "parsed": {
+        "totalCases": 8,
+        "confirmed": 5,
+        "deaths": 3,
+        "mentionsAndes": true,
+        "riskLow": true
+      },
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 5,
+        "deaths": 3
+      }
+    },
+    {
+      "id": "cdc-current",
+      "label": "CDC current situation",
+      "tier": 1,
+      "url": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
+      "ok": true,
+      "status": 200,
+      "contentHash": "aa35b6454d6a876f27a5ed91b6c8d351bd2152bc03e8d47eb54271e72af09f31",
+      "fetchedTextLength": 7939,
+      "parsed": {
+        "riskExtremelyLow": true,
+        "noUsCases": true,
+        "routineTravelNormal": true,
+        "symptoms4to42Days": true
+      },
+      "baseline": {
+        "riskExtremelyLow": true,
+        "noUsCases": true,
+        "routineTravelNormal": true,
+        "symptoms4to42Days": true
+      }
+    }
+  ],
+  "signals": {
+    "officialRiskStillLow": true,
+    "cdcNoUsCases": true,
+    "whoShipRiskModerate": true,
+    "whoOnboardHumanToHumanEvidence": true,
+    "sourceDisagreement": true,
+    "warnings": [],
+    "humanReviewRequired": true
+  }
+}

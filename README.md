@@ -25,6 +25,24 @@ npm run check-news
 node scripts/check-news.mjs --json
 ```
 
+保存官方来源快照：
+
+```bash
+npm run snapshot-news
+```
+
+生成编辑草稿：
+
+```bash
+npm run draft-update
+```
+
+完整验证：
+
+```bash
+npm run validate
+```
+
 ## 当前口径
 
 截至 2026-05-09，本版采用的核心口径是并列官方快照：
@@ -39,6 +57,7 @@ node scripts/check-news.mjs --json
 - [docs/DESIGN_PLAN.md](/Users/linji/projects/Andes-report/docs/DESIGN_PLAN.md)
 - [docs/NEWS_UPDATE_PLAYBOOK.md](/Users/linji/projects/Andes-report/docs/NEWS_UPDATE_PLAYBOOK.md)
 - [docs/AUTOMATIONS.md](/Users/linji/projects/Andes-report/docs/AUTOMATIONS.md)
+- [docs/progress/2026-05-09.md](/Users/linji/projects/Andes-report/docs/progress/2026-05-09.md)
 - [repo-local Codex skill](/Users/linji/projects/Andes-report/.codex/skills/andes-report-updater/SKILL.md)
 
 ## 更新规则

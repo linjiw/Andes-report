@@ -10,6 +10,18 @@ Run:
 npm run check-news
 ```
 
+To save an auditable source snapshot:
+
+```bash
+npm run snapshot-news
+```
+
+To save a snapshot plus an editor-facing update draft:
+
+```bash
+npm run draft-update
+```
+
 Primary source order:
 
 1. WHO DON latest event page.
@@ -79,10 +91,7 @@ Avoid:
 Before committing:
 
 ```bash
-node --check app.js
-node --check data/incident-data.js
-node --check scripts/check-news.mjs
-npm run check-news
+npm run validate
 ```
 
 For visual changes, serve locally and inspect:

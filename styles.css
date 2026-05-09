@@ -52,6 +52,31 @@ a:hover {
   background: var(--paper);
 }
 
+.site-nav {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.site-nav a {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fbfcfe;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.site-nav a[aria-current="page"] {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
 h1,
 h2,
 h3,
@@ -249,6 +274,7 @@ main {
 .snapshot-card p {
   color: var(--muted);
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 .dashboard-grid {

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Methodology | MV Hondius Andes Hantavirus 事件追踪</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Methodology</p>
+        <h1>信号分级与编辑方法</h1>
+        <p class="dek">
+          这个项目把官方事实、编辑解释和不确定性分开处理。目标不是追逐每条新闻，而是识别公共卫生风险是否真正改变。
+        </p>
+      </div>
+      <div class="asof">
+        <span>方法版本</span>
+        <strong>v1.1</strong>
+        <span>2026-05-09</span>
+      </div>
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="./index.html">Dashboard</a>
+        <a href="./methodology.html" aria-current="page">Methodology</a>
+        <a href="./sources.html">Sources</a>
+        <a href="./history.html">Update history</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="summary-band">
+        <div>
+          <h2>核心原则</h2>
+          <p>每个关键数字必须能追溯到原始来源；每个风险信号必须能解释触发规则；每次来源分歧都应保留，而不是被合并成一个看似确定的总数。</p>
+        </div>
+        <ul class="summary-list">
+          <li>Primary sources first：WHO、CDC、ECDC 等一手源优先。</li>
+          <li>Signal over noise：关注风险拐点，不制造新闻轰炸。</li>
+          <li>No drama：不用恐慌标题，不把 Andes virus 简化成 “new COVID”。</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Signal rules</p>
+            <h2>红绿信号规则</h2>
+          </div>
+        </div>
+        <div class="signal-grid">
+          <article class="signal-card green">
+            <span class="tag">绿色信号</span>
+            <h3>风险没有突破已知边界</h3>
+            <p>官方公众风险仍为低/非常低/极低，新增病例仍在已知乘客、船员、密接或医疗照护链条内。</p>
+          </article>
+          <article class="signal-card watch">
+            <span class="tag">观察信号</span>
+            <h3>需要更细追踪</h3>
+            <p>出现医护或船上工作人员病例，或 WHO 描述有限人传人证据，但仍局限在已知环境和密切接触模式中。</p>
+          </article>
+          <article class="signal-card red">
+            <span class="tag">红色信号</span>
+            <h3>风险模型需要重算</h3>
+            <p>出现无来源病例、普通短暂接触传播、公众风险等级上调、规范防护下连续医护感染或关键突变证据。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Editorial boundary</p>
+            <h2>自动化与人工复核边界</h2>
+          </div>
+        </div>
+        <div class="protocol-grid">
+          <article class="protocol-item">
+            <strong>可以自动化</strong>
+            <span>抓取 / diff / 草稿</span>
+            <p>官方页面抓取、hash 变化、候选病例数、来源快照、更新草稿和验证命令。</p>
+          </article>
+          <article class="protocol-item">
+            <strong>必须人工看</strong>
+            <span>医学判断</span>
+            <p>死亡数、风险等级、传播方式、旅行/隔离建议、治疗和症状指导。</p>
+          </article>
+          <article class="protocol-item">
+            <strong>事实展示</strong>
+            <span>并列来源</span>
+            <p>WHO 与 ECDC 口径不同就并列显示，不做算术合并，不用低等级来源覆盖高等级来源。</p>
+          </article>
+          <article class="protocol-item">
+            <strong>读者安全</strong>
+            <span>非医疗建议</span>
+            <p>本站只帮助理解公开信息；有暴露史和症状时应联系医生或当地卫生部门。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -248,6 +248,15 @@ window.INCIDENT_DATA = {
       sourceIds: ["who-response"]
     },
     {
+      date: "2026-05-07",
+      type: "official",
+      title: "CDC 声明美国公众风险极低",
+      place: "United States",
+      detail:
+        "CDC 表示正与相关部门和国际机构协调，并要求船上美国旅客遵循卫生官员指引。",
+      sourceIds: ["cdc-statement"]
+    },
+    {
       date: "2026-05-08",
       type: "official",
       title: "WHO DON600：8 例、6 确诊、2 可能、3 死亡",
@@ -264,15 +273,6 @@ window.INCIDENT_DATA = {
       detail:
         "CDC 写明美国尚无因此事件报告的 Andes virus 病例，常规旅行可继续；Andes virus 人传人通常限于密切接触。",
       sourceIds: ["cdc-current"]
-    },
-    {
-      date: "2026-05-07",
-      type: "official",
-      title: "CDC 声明美国公众风险极低",
-      place: "United States",
-      detail:
-        "CDC 表示正与相关部门和国际机构协调，并要求船上美国旅客遵循卫生官员指引。",
-      sourceIds: ["cdc-statement"]
     },
     {
       date: "2026-05-08",
