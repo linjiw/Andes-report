@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 2,
+  "checkedAt": "2026-05-09T20:22:48.077Z",
+  "results": [
+    {
+      "id": "who-don",
+      "sourceId": "who-don",
+      "label": "WHO Disease Outbreak News latest",
+      "tier": 1,
+      "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "ok": false,
+      "status": "fetch-error",
+      "fetchedAt": "2026-05-09T20:22:48.077Z",
+      "parserKey": "who-don",
+      "parserVersion": 1,
+      "parsed": {},
+      "facts": {},
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 6,
+        "probable": 2,
+        "suspected": 0,
+        "deaths": 3
+      },
+      "error": "fetch failed"
+    },
+    {
+      "id": "who-response",
+      "sourceId": "who-response",
+      "label": "WHO response update, historical",
+      "tier": 1,
+      "url": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
+      "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
+      "ok": false,
+      "status": "fetch-error",
+      "fetchedAt": "2026-05-09T20:22:48.077Z",
+      "parserKey": "who-response",
+      "parserVersion": 1,
+      "parsed": {},
+      "facts": {},
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 5,
+        "deaths": 3
+      },
+      "error": "fetch failed"
+    },
+    {
+      "id": "ecdc-daily",
+      "sourceId": "ecdc-daily",
+      "label": "ECDC daily update",
+      "tier": 1,
+      "url": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+      "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+      "ok": false,
+      "status": "fetch-error",
+      "fetchedAt": "2026-05-09T20:22:48.077Z",
+      "parserKey": "ecdc-daily",
+      "parserVersion": 1,
+      "parsed": {},
+      "facts": {},
+      "baseline": {
+        "totalCases": 8,
+        "confirmed": 6,
+        "probable": 2,
+        "suspected": 0,
+        "deaths": 3
+      },
+      "error": "fetch failed"
+    },
+    {
+      "id": "cdc-current",
+      "sourceId": "cdc-current",
+      "label": "CDC current situation",
+      "tier": 1,
+      "url": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
+      "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
+      "ok": false,
+      "status": "fetch-error",
+      "fetchedAt": "2026-05-09T20:22:48.077Z",
+      "parserKey": "cdc-current",
+      "parserVersion": 1,
+      "parsed": {},
+      "facts": {},
+      "baseline": {
+        "riskExtremelyLow": true,
+        "noUsCases": true,
+        "routineTravelNormal": true,
+        "symptoms4to42Days": true
+      },
+      "error": "fetch failed"
+    }
+  ],
+  "signals": {
+    "officialRiskStillLow": false,
+    "cdcNoUsCases": false,
+    "whoShipRiskModerate": false,
+    "whoOnboardHumanToHumanEvidence": false,
+    "sourceDisagreement": false,
+    "warnings": [
+      {
+        "sourceId": "who-don",
+        "sourceLabel": "WHO Disease Outbreak News latest",
+        "key": "totalCases",
+        "expected": 8,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "totalCases: baseline 8, parser returned blank"
+      },
+      {
+        "sourceId": "who-don",
+        "sourceLabel": "WHO Disease Outbreak News latest",
+        "key": "confirmed",
+        "expected": 6,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "confirmed: baseline 6, parser returned blank"
+      },
+      {
+        "sourceId": "who-don",
+        "sourceLabel": "WHO Disease Outbreak News latest",
+        "key": "probable",
+        "expected": 2,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "probable: baseline 2, parser returned blank"
+      },
+      {
+        "sourceId": "who-don",
+        "sourceLabel": "WHO Disease Outbreak News latest",
+        "key": "suspected",
+        "expected": 0,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "suspected: baseline 0, parser returned blank"
+      },
+      {
+        "sourceId": "who-don",
+        "sourceLabel": "WHO Disease Outbreak News latest",
+        "key": "deaths",
+        "expected": 3,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "deaths: baseline 3, parser returned blank"
+      },
+      {
+        "sourceId": "who-response",
+        "sourceLabel": "WHO response update, historical",
+        "key": "totalCases",
+        "expected": 8,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "totalCases: baseline 8, parser returned blank"
+      },
+      {
+        "sourceId": "who-response",
+        "sourceLabel": "WHO response update, historical",
+        "key": "confirmed",
+        "expected": 5,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "confirmed: baseline 5, parser returned blank"
+      },
+      {
+        "sourceId": "who-response",
+        "sourceLabel": "WHO response update, historical",
+        "key": "deaths",
+        "expected": 3,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "deaths: baseline 3, parser returned blank"
+      },
+      {
+        "sourceId": "ecdc-daily",
+        "sourceLabel": "ECDC daily update",
+        "key": "totalCases",
+        "expected": 8,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "totalCases: baseline 8, parser returned blank"
+      },
+      {
+        "sourceId": "ecdc-daily",
+        "sourceLabel": "ECDC daily update",
+        "key": "confirmed",
+        "expected": 6,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "confirmed: baseline 6, parser returned blank"
+      },
+      {
+        "sourceId": "ecdc-daily",
+        "sourceLabel": "ECDC daily update",
+        "key": "probable",
+        "expected": 2,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "probable: baseline 2, parser returned blank"
+      },
+      {
+        "sourceId": "ecdc-daily",
+        "sourceLabel": "ECDC daily update",
+        "key": "suspected",
+        "expected": 0,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "suspected: baseline 0, parser returned blank"
+      },
+      {
+        "sourceId": "ecdc-daily",
+        "sourceLabel": "ECDC daily update",
+        "key": "deaths",
+        "expected": 3,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "deaths: baseline 3, parser returned blank"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "riskExtremelyLow",
+        "expected": true,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "riskExtremelyLow: baseline true, parser returned blank"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "noUsCases",
+        "expected": true,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "noUsCases: baseline true, parser returned blank"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "routineTravelNormal",
+        "expected": true,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "routineTravelNormal: baseline true, parser returned blank"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "symptoms4to42Days",
+        "expected": true,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "symptoms4to42Days: baseline true, parser returned blank"
+      }
+    ],
+    "humanReviewRequired": true
+  },
+  "status": {
+    "fetchErrors": 4,
+    "parserBlanks": 17,
+    "snapshotReady": false,
+    "humanReviewRequired": true
+  }
+}
