@@ -1,7 +1,7 @@
 # Andes framework review
 
-Generated at: 2026-05-09T17:58:08.402Z
-Latest official check: 2026-05-09T17:57:37.377Z
+Generated at: 2026-05-10T14:10:58.148Z
+Latest official check: 2026-05-10T12:39:29.472Z
 
 ## Dashboard sync
 
@@ -23,8 +23,8 @@ Latest official check: 2026-05-09T17:57:37.377Z
 ## Warning patterns
 
 - Recent runs reviewed: 5
-- Runs with parser blanks: 0
-- Runs with fetch errors: 0
+- Runs with parser blanks: 1
+- Runs with fetch errors: 1
 - Runs requiring human review: 5
 
 ## Registry coverage
@@ -43,4 +43,5 @@ Latest official check: 2026-05-09T17:57:37.377Z
 ## Recommendations
 
 - Human review is still required for the latest official check before treating narrative/risk interpretation as settled.
+- Review repeated parser/fetch failures and adjust source parsers or fallback handling.
 

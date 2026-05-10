@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-09T17:58:08.402Z",
+  "generatedAt": "2026-05-10T14:10:58.148Z",
   "latest": {
-    "checkedAt": "2026-05-09T17:57:37.377Z",
+    "checkedAt": "2026-05-10T12:39:29.472Z",
     "status": {
       "fetchErrors": 0,
       "parserBlanks": 0,
@@ -91,8 +91,8 @@
   },
   "warningPatterns": {
     "recentRuns": 5,
-    "parserBlankRuns": 0,
-    "fetchErrorRuns": 0,
+    "parserBlankRuns": 1,
+    "fetchErrorRuns": 1,
     "humanReviewRuns": 5
   },
   "registryCoverage": {
@@ -101,6 +101,7 @@
     "pollableMissingFromLatest": []
   },
   "recommendations": [
-    "Human review is still required for the latest official check before treating narrative/risk interpretation as settled."
+    "Human review is still required for the latest official check before treating narrative/risk interpretation as settled.",
+    "Review repeated parser/fetch failures and adjust source parsers or fallback handling."
   ]
 }
