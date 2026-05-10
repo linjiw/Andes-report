@@ -1,8 +1,21 @@
 {
   "schemaVersion": 2,
-  "updatedAt": "2026-05-09T20:22:48.077Z",
-  "lastCheckedAt": "2026-05-09T20:22:48.077Z",
+  "updatedAt": "2026-05-10T01:17:15.002Z",
+  "lastCheckedAt": "2026-05-10T01:17:15.002Z",
   "snapshots": [
+    {
+      "checkedAt": "2026-05-10T01:17:15.002Z",
+      "path": "data/source-snapshots/2026-05-10T01-17-15-002Z.json",
+      "draftPath": "data/update-drafts/2026-05-10T01-17-15-002Z.md",
+      "warnings": 0,
+      "humanReviewRequired": true,
+      "officialRiskStillLow": true,
+      "sourceDisagreement": false,
+      "snapshotReady": true,
+      "statusPublished": true,
+      "fetchErrors": 0,
+      "parserBlanks": 0
+    },
     {
       "checkedAt": "2026-05-09T20:22:48.077Z",
       "path": "data/source-snapshots/2026-05-09T20-22-48-077Z.json",
