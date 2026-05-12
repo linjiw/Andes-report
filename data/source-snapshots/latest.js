@@ -1,6 +1,6 @@
 window.LATEST_SOURCE_SNAPSHOT = {
   "schemaVersion": 2,
-  "checkedAt": "2026-05-12T13:02:07.728Z",
+  "checkedAt": "2026-05-12T18:59:52.538Z",
   "results": [
     {
       "id": "who-don",
@@ -11,7 +11,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-12T13:02:08.051Z",
+      "fetchedAt": "2026-05-12T18:59:52.802Z",
       "parserKey": "who-don",
       "parserVersion": 1,
       "contentHash": "c1db0daf65f410585235d19a22121e2af0a326e8e128faceff6c8eeacc41f520",
@@ -60,7 +60,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-12T13:02:08.100Z",
+      "fetchedAt": "2026-05-12T18:59:52.837Z",
       "parserKey": "who-response",
       "parserVersion": 1,
       "contentHash": "4df5171c9e25ad3a28fd634954c0be6143eae546530c96170b34e58e337b372b",
@@ -97,7 +97,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-12T13:02:08.343Z",
+      "fetchedAt": "2026-05-12T18:59:53.216Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
       "contentHash": "f18737932b689ef2cdab23c4f0997186d61432c78bda5f03c0077fc641fbb2bc",
@@ -143,29 +143,29 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-12T13:02:08.370Z",
+      "fetchedAt": "2026-05-12T18:59:53.251Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "e62ee5909dc2b9a37bc5400dfa58ff579eaaf55b140fd9287efa0715fd496e6d",
-      "fetchedTextLength": 8186,
+      "contentHash": "ca89b442f575612aaef1dbcf036f1ca3ade4837e81109171f2fefee32f7e6f1f",
+      "fetchedTextLength": 5773,
       "parsed": {
         "riskExtremelyLow": true,
-        "noUsCases": true,
-        "routineTravelNormal": true,
-        "symptoms4to42Days": true
+        "noUsCases": false,
+        "routineTravelNormal": false,
+        "symptoms4to42Days": false
       },
       "facts": {
         "risk": {
           "usPublicExtremelyLow": true
         },
         "travel": {
-          "routineTravelNormal": true
+          "routineTravelNormal": false
         },
         "monitoring": {
-          "symptoms4to42Days": true
+          "symptoms4to42Days": false
         },
         "cases": {
-          "noUsOutbreakLinkedCases": true
+          "noUsOutbreakLinkedCases": false
         }
       },
       "baseline": {
@@ -178,7 +178,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
   ],
   "signals": {
     "officialRiskStillLow": true,
-    "cdcNoUsCases": true,
+    "cdcNoUsCases": false,
     "whoShipRiskModerate": true,
     "whoOnboardHumanToHumanEvidence": true,
     "sourceDisagreement": true,
@@ -200,6 +200,33 @@ window.LATEST_SOURCE_SNAPSHOT = {
         "observed": 9,
         "type": "baseline-change",
         "message": "confirmed: baseline 6, page 9"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "noUsCases",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "noUsCases: baseline true, page false"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "routineTravelNormal",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "routineTravelNormal: baseline true, page false"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "symptoms4to42Days",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "symptoms4to42Days: baseline true, page false"
       }
     ],
     "humanReviewRequired": true
