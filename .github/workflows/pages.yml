@@ -32,7 +32,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p public
-          cp index.html methodology.html sources.html history.html disclaimer.html styles.css app.js package.json public/
+          cp index.html methodology.html sources.html history.html disclaimer.html styles.css app.js sync-status.js package.json public/
           mkdir -p public/data/source-snapshots
           mkdir -p public/data/framework-review
           cp data/incident-data.js data/events.csv data/sources.csv public/data/

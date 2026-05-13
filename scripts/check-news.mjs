@@ -20,7 +20,17 @@ const numberWords = new Map([
   ["seven", 7],
   ["eight", 8],
   ["nine", 9],
-  ["ten", 10]
+  ["ten", 10],
+  ["eleven", 11],
+  ["twelve", 12],
+  ["thirteen", 13],
+  ["fourteen", 14],
+  ["fifteen", 15],
+  ["sixteen", 16],
+  ["seventeen", 17],
+  ["eighteen", 18],
+  ["nineteen", 19],
+  ["twenty", 20]
 ]);
 
 function stripHtml(html) {
@@ -64,11 +74,12 @@ function matchNumber(text, patterns) {
 function parseEcdc(text) {
   return {
     totalCases: matchNumber(text, [
-      /total of\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+cases/i,
+      /total of\s+(\d+|[a-z]+)\s+cases/i,
       /(\d+)\s+cases\s+have been reported/i
     ]),
     confirmed: matchNumber(text, [/Confirmed cases\*+\s+(\d+)/i, /(\d+)\s+confirmed/i]),
     probable: matchNumber(text, [/Probable cases\*+\s+(\d+)/i, /(\d+)\s+probable/i]),
+    inconclusive: matchNumber(text, [/Inconclusive cases\*+\s+(\d+)/i, /(\d+)\s+inconclusive/i]),
     suspected: matchNumber(text, [/Suspected cases\*+\s+(\d+)/i, /(\d+)\s+suspected/i]),
     deaths: matchNumber(text, [/Deaths\s+(\d+)/i, /(\d+)\s+deaths/i]),
     riskVeryLow:
@@ -131,9 +142,10 @@ function parseWhoDon(text) {
 function parseCdc(text) {
   return {
     riskExtremelyLow: /extremely low/i.test(text),
-    noUsCases: /no cases of Andes virus have been reported in the United States as a result of this outbreak/i.test(
-      text
-    ),
+    noUsCases:
+      /no cases of Andes virus have been (?:reported|confirmed) in the United States as a result of this outbreak/i.test(
+        text
+      ),
     routineTravelNormal: /Routine travel can continue as normal/i.test(text),
     symptoms4to42Days: /between 4 to 42 days after exposure/i.test(text)
   };
@@ -146,6 +158,7 @@ function normalizeFacts(source, parsed) {
         total: parsed.totalCases ?? null,
         confirmed: parsed.confirmed ?? null,
         probable: parsed.probable ?? null,
+        inconclusive: parsed.inconclusive ?? null,
         suspected: parsed.suspected ?? null,
         deaths: parsed.deaths ?? null
       },
@@ -165,6 +178,7 @@ function normalizeFacts(source, parsed) {
         total: parsed.totalCases ?? null,
         confirmed: parsed.confirmed ?? null,
         probable: parsed.probable ?? null,
+        inconclusive: parsed.inconclusive ?? null,
         suspected: parsed.suspected ?? null,
         deaths: parsed.deaths ?? null
       },
@@ -181,12 +195,6 @@ function normalizeFacts(source, parsed) {
     return {
       risk: {
         usPublicExtremelyLow: Boolean(parsed.riskExtremelyLow)
-      },
-      travel: {
-        routineTravelNormal: Boolean(parsed.routineTravelNormal)
-      },
-      monitoring: {
-        symptoms4to42Days: Boolean(parsed.symptoms4to42Days)
       },
       cases: {
         noUsOutbreakLinkedCases: Boolean(parsed.noUsCases)
@@ -595,9 +603,9 @@ function printText(snapshot) {
   console.log(
     `- ECDC count check: total=${ecdc.totalCases ?? "unknown"}, confirmed=${
       ecdc.confirmed ?? "unknown"
-    }, probable=${ecdc.probable ?? "unknown"}, suspected=${ecdc.suspected ?? "unknown"}, deaths=${
-      ecdc.deaths ?? "unknown"
-    }`
+    }, probable=${ecdc.probable ?? "unknown"}, inconclusive=${ecdc.inconclusive ?? "unknown"}, suspected=${
+      ecdc.suspected ?? "unknown"
+    }, deaths=${ecdc.deaths ?? "unknown"}`
   );
   console.log(`- Human review required: ${snapshot.signals.humanReviewRequired}`);
   console.log(`- Automated status snapshot ready: ${snapshotReady}`);

@@ -1,13 +1,13 @@
 # Andes framework review
 
-Generated at: 2026-05-13T14:35:51.097Z
-Latest official check: 2026-05-13T07:24:47.409Z
+Generated at: 2026-05-13T16:13:25.413Z
+Latest official check: 2026-05-13T16:13:20.893Z
 
 ## Dashboard sync
 
-- Overall aligned: false
+- Overall aligned: true
 - WHO aligned: true
-- ECDC aligned: false
+- ECDC aligned: true
 - CDC aligned: true
 
 ## Latest status
@@ -19,6 +19,10 @@ Latest official check: 2026-05-13T07:24:47.409Z
 
 ## Key facts by source
 
+- WHO Disease Outbreak News latest: `{"caseCounts":{"total":8,"confirmed":6,"probable":2,"inconclusive":null,"suspected":0,"deaths":3},"risk":{"globalLow":true,"shipModerate":true},"transmission":{"onboardHumanToHumanEvidence":true}}`
+- WHO response update, historical: `{"caseCounts":{"total":8,"confirmed":5,"deaths":3},"risk":{"globalLow":true}}`
+- ECDC daily update: `{"caseCounts":{"total":11,"confirmed":8,"probable":2,"inconclusive":1,"suspected":0,"deaths":3},"risk":{"regionalVeryLow":true},"travel":{"tenerifeMay10":true}}`
+- CDC current situation: `{"risk":{"usPublicExtremelyLow":true},"cases":{"noUsOutbreakLinkedCases":true}}`
 
 ## Warning patterns
 
@@ -35,14 +39,6 @@ Latest official check: 2026-05-13T07:24:47.409Z
 
 ## Recommendations
 
-- WHO Disease Outbreak News latest: `{"caseCounts":{"total":8,"confirmed":6,"probable":2,"suspected":0,"deaths":3},"risk":{"globalLow":true,"shipModerate":true},"transmission":{"onboardHumanToHumanEvidence":true}}`
-- WHO response update, historical: `{"caseCounts":{"total":8,"confirmed":5,"deaths":3},"risk":{"globalLow":true}}`
-- ECDC daily update: `{"caseCounts":{"total":11,"confirmed":9,"probable":2,"suspected":0,"deaths":3},"risk":{"regionalVeryLow":true},"travel":{"tenerifeMay10":true}}`
-- CDC current situation: `{"risk":{"usPublicExtremelyLow":true},"travel":{"routineTravelNormal":false},"monitoring":{"symptoms4to42Days":false},"cases":{"noUsOutbreakLinkedCases":false}}`
-
-## Recommendations
-
-- Curated dashboard is not fully aligned with the latest successful official check.
 - Human review is still required for the latest official check before treating narrative/risk interpretation as settled.
 - Review repeated parser/fetch failures and adjust source parsers or fallback handling.
 

@@ -8,57 +8,13 @@ const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 
 globalThis.window = globalThis;
 await import("../data/incident-data.js");
+await import("../sync-status.js");
 
 const incidentData = globalThis.INCIDENT_DATA;
+const { dashboardSyncStatus } = globalThis.AndesSyncStatus;
 const latestSnapshot = JSON.parse(await readFile(join(repoRoot, "data/source-snapshots/latest.json"), "utf8"));
 const snapshotIndex = JSON.parse(await readFile(join(repoRoot, "data/source-snapshots/index.json"), "utf8"));
 const sourceRegistry = JSON.parse(await readFile(join(repoRoot, "data/source-registry.json"), "utf8"));
-
-function latestResultsById() {
-  return new Map((latestSnapshot.results ?? []).map((result) => [result.id, result]));
-}
-
-function sourceIdByRole(role) {
-  return sourceRegistry.sources.find((source) => source.roles?.includes(role) && source.active)?.id ?? null;
-}
-
-function findSnapshotByPrimarySourceId(sourceId) {
-  return incidentData.sourceSnapshots.find((item) => item.sourceIds?.[0] === sourceId);
-}
-
-function countsMatch(dataSnapshot, parsed) {
-  if (!dataSnapshot || !parsed) return false;
-  return (
-    dataSnapshot.total === (parsed.totalCases ?? null) &&
-    dataSnapshot.confirmed === (parsed.confirmed ?? null) &&
-    dataSnapshot.probable === (parsed.probable ?? null) &&
-    dataSnapshot.suspected === (parsed.suspected ?? null) &&
-    dataSnapshot.deaths === (parsed.deaths ?? null)
-  );
-}
-
-function dashboardSyncStatus() {
-  const byId = latestResultsById();
-  const primaryCountSourceId = sourceIdByRole("primary-count");
-  const comparisonCountSourceId = sourceIdByRole("comparison-count");
-  const usRiskSourceId = sourceIdByRole("us-risk");
-  const whoAligned = countsMatch(findSnapshotByPrimarySourceId(primaryCountSourceId), byId.get(primaryCountSourceId)?.parsed);
-  const ecdcAligned = countsMatch(
-    findSnapshotByPrimarySourceId(comparisonCountSourceId),
-    byId.get(comparisonCountSourceId)?.parsed
-  );
-  const cdcSnapshot = findSnapshotByPrimarySourceId(usRiskSourceId);
-  const cdcAligned =
-    Boolean(cdcSnapshot) &&
-    (!byId.get(usRiskSourceId)?.parsed?.riskExtremelyLow || /extremely low/i.test(cdcSnapshot.publicRisk ?? ""));
-
-  return {
-    whoAligned,
-    ecdcAligned,
-    cdcAligned,
-    overallAligned: Boolean(whoAligned && ecdcAligned && cdcAligned)
-  };
-}
 
 function repeatedWarningSummary() {
   const recent = snapshotIndex.snapshots.slice(0, 5);
@@ -105,6 +61,8 @@ function buildRecommendations(report) {
   return recommendations;
 }
 
+const dashboardSync = dashboardSyncStatus({ incidentData, latestSnapshot, sourceRegistry });
+
 const report = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
@@ -122,7 +80,12 @@ const report = {
       facts: result.facts ?? {}
     }))
   },
-  dashboardSync: dashboardSyncStatus(),
+  dashboardSync: {
+    whoAligned: dashboardSync.whoAligned,
+    ecdcAligned: dashboardSync.ecdcAligned,
+    cdcAligned: dashboardSync.cdcAligned,
+    overallAligned: dashboardSync.aligned
+  },
   warningPatterns: repeatedWarningSummary(),
   registryCoverage: registryCoverage()
 };
@@ -151,7 +114,11 @@ function toMarkdown(value) {
     `- Parser blanks: ${value.latest.status.parserBlanks}`,
     "",
     "## Key facts by source",
-    "",
+    ""
+  ];
+
+  value.latest.keyFacts.forEach((item) => lines.push(`- ${item.label}: \`${JSON.stringify(item.facts)}\``));
+  lines.push(
     "",
     "## Warning patterns",
     "",
@@ -168,12 +135,7 @@ function toMarkdown(value) {
     "",
     "## Recommendations",
     ""
-  ];
-
-  value.latest.keyFacts.forEach((item) => lines.push(`- ${item.label}: \`${JSON.stringify(item.facts)}\``));
-  lines.push("");
-  lines.push("## Recommendations");
-  lines.push("");
+  );
   value.recommendations.forEach((item) => lines.push(`- ${item}`));
   lines.push("");
   return `${lines.join("\n")}\n`;

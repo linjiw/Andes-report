@@ -11,9 +11,13 @@ date,type,title,place,summary,primary_source
 2026-05-07,official,WHO 更新：8 例、5 确诊、3 死亡，病毒为 Andes virus,WHO,"公共卫生风险仍低，后续可能因潜伏期出现更多病例。",WHO Response
 2026-05-07,official,CDC 声明美国公众风险极低,United States,"CDC 正与相关部门和国际机构协调。",CDC Statement
 2026-05-08,official,WHO DON600：8 例、6 确诊、2 可能、3 死亡,WHO,"WHO 将全球风险评估为低，船上乘客和船员风险为中等；当前证据指向船上已知接触环境内的后续人传人。",WHO DON600
-2026-05-08,official,CDC Current Situation：美国公众和旅行者风险极低,United States,"CDC 写明美国尚无因此事件报告的 Andes virus 病例，常规旅行可继续。",CDC Current Situation
-2026-05-09,official,ECDC 每日页与 WHO 对齐为 6 确诊、2 可能、3 死亡,ECDC,"8 例中 6 确诊、2 可能、0 疑似、3 死亡；人传人通常需要密切、长期接触；EU/EEA 普通人群风险非常低。",ECDC Daily
-2026-05-10,response,预计抵达 Tenerife/Granadilla,"Tenerife, Spain","ECDC 5 月 9 日页面写该船继续驶向 Tenerife 的 Granadilla 港，并预计 5 月 10 日抵达。",ECDC Daily
+2026-05-08,official,CDC Current Situation：美国公众和旅行者风险极低,United States,"CDC 2026-05-12 页面写明美国尚无因此事件确认的 Andes virus 病例，美国公众和旅行者总体风险仍极低，并描述返美乘客监测和跨机构公共卫生协作。",CDC Current Situation
+2026-05-09,official,ECDC 返程指导：全船人员按高风险接触者管理,ECDC,"ECDC 2026-05-09 Rapid Scientific Advice 为返程与下船处置设定更保守口径：全船人员先按高风险接触者管理，最多监测/隔离 42 天，且该文档把 Day 0 记为 5 月 6 日。",ECDC Rapid Advice
+2026-05-10,response,ECDC：MV Hondius 已抵达 Tenerife 并开始下船返程,"Tenerife, Spain","ECDC 5 月 10 日每日页写该船已抵达 Tenerife 港口，乘客正在下船并分批搭乘返程航班。",ECDC Daily
+2026-05-10,official,CDC 临时指导：船上暴露按下船后继续进入 42 天随访,United States,"CDC 2026-05-10 Interim Guidance 把 4 月 6 日至相关暴露乘客完成下船期间在 MV Hondius 上的经历定义为潜在暴露，并把返程后 42 天的日常监测、自我隔离触发和分级随访作为核心处置。",CDC Interim Guidance
+2026-05-11,official,ECDC 每日页更新为 9 例、7 确诊、2 可能、3 死亡,ECDC,"ECDC 2026-05-11 页面写明截至 2026-05-11 14:00 共 9 例，其中 7 确诊、2 可能、0 疑似、3 死亡；人传人通常需要密切、长期接触；EU/EEA 普通人群风险非常低。",ECDC Daily
+2026-05-12,official,ECDC 每日页更新为 11 例、9 确诊、2 可能、3 死亡,ECDC,"ECDC 2026-05-12 页面写明截至 2026-05-12 11:30 共 11 例，其中 9 确诊、2 可能、0 疑似、3 死亡；并写明 5 月 11 日已完成下船和返程安排，EU/EEA 普通人群风险仍非常低。",ECDC Daily
+2026-05-13,official,ECDC 每日页维持 11 例，并改列为 8 确诊、2 可能、1 未定论、3 死亡,ECDC,"ECDC 2026-05-13 页面写明截至 2026-05-13 14:00 共 11 例，其中 8 确诊、2 可能、1 例未定论、0 疑似、3 死亡；并继续写明人传人通常需要密切、长期接触，EU/EEA 普通人群风险仍非常低。",ECDC Daily
 2026-05-24,monitoring,2 周观察窗,Monitoring,"若无脱离已知接触链病例，可视为第一个积极观察信号；不是官方结案标准。",Derived
 2026-06-21,monitoring,42 天潜伏期窗口,Monitoring,"CDC 写 Andes virus 症状可在暴露后 4-42 天出现。",CDC Andes
-2026-06-24,monitoring,45 天主动症状监测窗口,Monitoring,"WHO 对乘客和船员建议主动症状监测 45 天；若期间未见无来源病例且风险等级未上调，可转为被动观察。",WHO DON
+2026-06-21,monitoring,WHO 高风险接触者 42 天主动监测/隔离窗口,Monitoring,"WHO DON600 要求高风险接触者自最后暴露起 42 天主动症状监测并采取居家或设施隔离；若以 5 月 10 日作为公开追踪锚点，窗口到 6 月 21 日，但个体起算日可能因返程安排不同而略有差异。",WHO DON

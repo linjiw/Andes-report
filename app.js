@@ -1,5 +1,7 @@
 const data = window.INCIDENT_DATA;
 const latestSnapshot = window.LATEST_SOURCE_SNAPSHOT ?? null;
+const sourceRegistry = { sources: data.sources };
+const computeDashboardSyncStatus = window.AndesSyncStatus.dashboardSyncStatus;
 
 const typeLabels = {
   all: "全部",
@@ -29,6 +31,42 @@ function clamp(number, min, max) {
   return Math.min(Math.max(number, min), max);
 }
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    };
+    return entities[char];
+  });
+}
+
+function classToken(value, fallback = "") {
+  const text = String(value ?? "");
+  return /^[a-z0-9_-]+$/i.test(text) ? text : fallback;
+}
+
+function safeUrl(value) {
+  try {
+    const url = new URL(String(value ?? ""), window.location.href);
+    return ["http:", "https:"].includes(url.protocol) ? escapeHtml(url.href) : "#";
+  } catch {
+    return "#";
+  }
+}
+
+function safeColor(value) {
+  const text = String(value ?? "");
+  return /^#[0-9a-f]{3}([0-9a-f]{3})?([0-9a-f]{2})?$/i.test(text) ? text : "#64748b";
+}
+
+function displayValue(value, fallback = "—") {
+  return escapeHtml(value ?? fallback);
+}
+
 function sourceLabel(ids) {
   return ids
     .map((id) => sourceMap.get(id)?.org)
@@ -46,55 +84,8 @@ function sourceDateLabel(ids) {
     .join(" / ");
 }
 
-function findSnapshotByPrimarySourceId(sourceId) {
-  return data.sourceSnapshots.find((item) => item.sourceIds?.[0] === sourceId);
-}
-
-function latestResultsById() {
-  return new Map((latestSnapshot?.results ?? []).map((result) => [result.id, result]));
-}
-
-function countsMatch(dataSnapshot, parsed) {
-  if (!dataSnapshot || !parsed) return false;
-  return (
-    dataSnapshot.total === (parsed.totalCases ?? null) &&
-    dataSnapshot.confirmed === (parsed.confirmed ?? null) &&
-    dataSnapshot.probable === (parsed.probable ?? null) &&
-    dataSnapshot.suspected === (parsed.suspected ?? null) &&
-    dataSnapshot.deaths === (parsed.deaths ?? null)
-  );
-}
-
 function dashboardSyncStatus() {
-  if (!latestSnapshot?.checkedAt) {
-    return {
-      aligned: false,
-      checkedAt: null,
-      publishable: false,
-      humanReviewRequired: true
-    };
-  }
-
-  const byId = latestResultsById();
-  const whoResult = byId.get("who-don");
-  const ecdcResult = byId.get("ecdc-daily");
-  const cdcResult = byId.get("cdc-current");
-  const whoSnapshot = findSnapshotByPrimarySourceId("who-don");
-  const ecdcSnapshot = findSnapshotByPrimarySourceId("ecdc-daily");
-  const cdcSnapshot = findSnapshotByPrimarySourceId("cdc-current");
-
-  const whoAligned = countsMatch(whoSnapshot, whoResult?.parsed);
-  const ecdcAligned = countsMatch(ecdcSnapshot, ecdcResult?.parsed);
-  const cdcAligned =
-    Boolean(cdcSnapshot) &&
-    (!cdcResult?.parsed?.riskExtremelyLow || /extremely low/i.test(cdcSnapshot.publicRisk ?? ""));
-
-  return {
-    aligned: Boolean(whoAligned && ecdcAligned && cdcAligned),
-    checkedAt: latestSnapshot.checkedAt,
-    snapshotReady: latestSnapshot.status?.snapshotReady ?? (latestSnapshot.signals?.warnings?.length ?? 0) === 0,
-    humanReviewRequired: Boolean(latestSnapshot.signals?.humanReviewRequired)
-  };
+  return computeDashboardSyncStatus({ incidentData: data, latestSnapshot, sourceRegistry });
 }
 
 function renderAutomationStatus() {
@@ -139,7 +130,7 @@ function renderSummary() {
   document.querySelector("#posture").textContent = data.meta.posture;
 
   const list = document.querySelector("#summaryList");
-  list.innerHTML = data.summary.map((item) => `<li>${item}</li>`).join("");
+  list.innerHTML = data.summary.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 }
 
 function renderMetrics() {
@@ -147,11 +138,11 @@ function renderMetrics() {
   grid.innerHTML = data.stats
     .map(
       (stat) => `
-        <article class="metric-card ${stat.tone}">
-          <span class="label">${stat.label}</span>
-          <strong class="value">${stat.value}</strong>
-          <p class="detail">${stat.detail}</p>
-          <p class="detail">来源：${sourceDateLabel(stat.sourceIds)}</p>
+        <article class="metric-card ${classToken(stat.tone)}">
+          <span class="label">${escapeHtml(stat.label)}</span>
+          <strong class="value">${escapeHtml(stat.value)}</strong>
+          <p class="detail">${escapeHtml(stat.detail)}</p>
+          <p class="detail">来源：${escapeHtml(sourceDateLabel(stat.sourceIds))}</p>
         </article>
       `
     )
@@ -165,14 +156,14 @@ function renderCaseChart() {
     const start = current;
     const end = current + (item.value / total) * 100;
     current = end;
-    return `${item.color} ${start}% ${end}%`;
+    return `${safeColor(item.color)} ${start}% ${end}%`;
   });
 
   const donut = document.querySelector("#donut");
   donut.style.background = `conic-gradient(${gradientParts.join(", ")})`;
   donut.innerHTML = `
     <div class="donut-center">
-      <strong>${total}</strong>
+      <strong>${escapeHtml(total)}</strong>
       <span>报告病例</span>
     </div>
   `;
@@ -184,11 +175,11 @@ function renderCaseChart() {
       return `
         <div class="bar-row">
           <div class="bar-meta">
-            <strong>${item.label}</strong>
-            <span>${item.value} 例 / ${percent}%</span>
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${escapeHtml(item.value)} 例 / ${escapeHtml(percent)}%</span>
           </div>
           <div class="bar-track" aria-hidden="true">
-            <div class="bar-fill" style="width:${percent}%; background:${item.color}"></div>
+            <div class="bar-fill" style="width:${percent}%; background:${safeColor(item.color)}"></div>
           </div>
         </div>
       `;
@@ -202,10 +193,10 @@ function renderRiskRatings() {
     .map(
       (risk) => `
         <div class="risk-item">
-          <span class="risk-badge">${risk.rating}</span>
+          <span class="risk-badge">${escapeHtml(risk.rating)}</span>
           <div>
-            <strong>${risk.org}</strong>
-            <span>${risk.audience} · ${risk.date}</span>
+            <strong>${escapeHtml(risk.org)}</strong>
+            <span>${escapeHtml(risk.audience)} · ${escapeHtml(risk.date)}</span>
           </div>
         </div>
       `
@@ -219,18 +210,19 @@ function renderSourceSnapshots() {
     .map(
       (snapshot) => `
         <article class="snapshot-card">
-          <h3>${snapshot.source}</h3>
-          <span class="snapshot-date">${snapshot.date} · 来源：${sourceDateLabel(snapshot.sourceIds)}</span>
+          <h3>${escapeHtml(snapshot.source)}</h3>
+          <span class="snapshot-date">${escapeHtml(snapshot.date)} · 来源：${escapeHtml(sourceDateLabel(snapshot.sourceIds))}</span>
           <div class="snapshot-counts">
-            <span><strong>${snapshot.total ?? "—"}</strong>报告病例</span>
-            <span><strong>${snapshot.confirmed ?? "—"}</strong>确诊</span>
-            <span><strong>${snapshot.probable ?? "—"}</strong>可能</span>
-            <span><strong>${snapshot.suspected ?? "—"}</strong>疑似</span>
-            <span><strong>${snapshot.nonCases ?? "—"}</strong>非病例</span>
-            <span><strong>${snapshot.deaths ?? "—"}</strong>死亡</span>
+            <span><strong>${displayValue(snapshot.total)}</strong>报告病例</span>
+            <span><strong>${displayValue(snapshot.confirmed)}</strong>确诊</span>
+            <span><strong>${displayValue(snapshot.probable)}</strong>可能</span>
+            <span><strong>${displayValue(snapshot.inconclusive)}</strong>未定论</span>
+            <span><strong>${displayValue(snapshot.suspected)}</strong>疑似</span>
+            <span><strong>${displayValue(snapshot.nonCases)}</strong>非病例</span>
+            <span><strong>${displayValue(snapshot.deaths)}</strong>死亡</span>
           </div>
-          <p><strong>风险：</strong>${snapshot.publicRisk}</p>
-          <p>${snapshot.note}</p>
+          <p><strong>风险：</strong>${escapeHtml(snapshot.publicRisk)}</p>
+          <p>${escapeHtml(snapshot.note)}</p>
         </article>
       `
     )
@@ -243,9 +235,9 @@ function renderRoute() {
     .map(
       (stop) => `
         <div class="route-stop">
-          <span>${formatDate(stop.date)}</span>
-          <strong>${stop.label}</strong>
-          <small>${stop.place}</small>
+          <span>${escapeHtml(formatDate(stop.date))}</span>
+          <strong>${escapeHtml(stop.label)}</strong>
+          <small>${escapeHtml(stop.place)}</small>
         </div>
       `
     )
@@ -258,9 +250,9 @@ function renderMonitoringWindows() {
     .map(
       (windowItem) => `
         <article class="window-card">
-          <strong>${windowItem.label}</strong>
-          <span class="dates">${formatDate(windowItem.from)} - ${formatDate(windowItem.to)}</span>
-          <p>${windowItem.rule}</p>
+          <strong>${escapeHtml(windowItem.label)}</strong>
+          <span class="dates">${escapeHtml(formatDate(windowItem.from))} - ${escapeHtml(formatDate(windowItem.to))}</span>
+          <p>${escapeHtml(windowItem.rule)}</p>
         </article>
       `
     )
@@ -273,8 +265,8 @@ function renderFilters() {
   filters.innerHTML = types
     .map(
       (type) => `
-        <button class="filter-button" type="button" data-type="${type}" aria-pressed="${type === "all"}">
-          ${typeLabels[type]}
+        <button class="filter-button" type="button" data-type="${classToken(type)}" aria-pressed="${type === "all"}">
+          ${escapeHtml(typeLabels[type])}
         </button>
       `
     )
@@ -308,13 +300,13 @@ function renderTimeScale() {
   const ticks = anchors
     .map((anchor) => {
       const left = clamp(((parseDate(anchor.date).getTime() - start) / range) * 100, 0, 100);
-      return `<div class="scale-tick" style="left:${left}%"><span>${anchor.label}<br>${formatDate(anchor.date)}</span></div>`;
+      return `<div class="scale-tick" style="left:${left}%"><span>${escapeHtml(anchor.label)}<br>${escapeHtml(formatDate(anchor.date))}</span></div>`;
     })
     .join("");
   const nowLeft = clamp(((parseDate(data.meta.asOf).getTime() - start) / range) * 100, 0, 100);
   scale.innerHTML =
     ticks +
-    `<div class="scale-now" style="left:${nowLeft}%"><span>当前<br>${formatDate(data.meta.asOf)}</span></div>`;
+    `<div class="scale-now" style="left:${nowLeft}%"><span>当前<br>${escapeHtml(formatDate(data.meta.asOf))}</span></div>`;
 }
 
 function renderTimeline(filterType = "all") {
@@ -323,15 +315,15 @@ function renderTimeline(filterType = "all") {
   container.innerHTML = events
     .map(
       (event) => `
-        <article class="event-card ${event.type}">
+        <article class="event-card ${classToken(event.type)}">
           <div>
-            <div class="event-date">${event.date}</div>
-            <span class="event-type">${typeLabels[event.type]}</span>
+            <div class="event-date">${escapeHtml(event.date)}</div>
+            <span class="event-type">${escapeHtml(typeLabels[event.type])}</span>
           </div>
           <div>
-            <h3>${event.title}</h3>
-            <div class="event-place">${event.place} · 来源：${sourceDateLabel(event.sourceIds)}</div>
-            <p>${event.detail}</p>
+            <h3>${escapeHtml(event.title)}</h3>
+            <div class="event-place">${escapeHtml(event.place)} · 来源：${escapeHtml(sourceDateLabel(event.sourceIds))}</div>
+            <p>${escapeHtml(event.detail)}</p>
           </div>
         </article>
       `
@@ -344,12 +336,12 @@ function renderSignals() {
   container.innerHTML = data.signals
     .map(
       (signal) => `
-        <article class="signal-card ${signal.severity}">
-          <span class="tag">${severityLabels[signal.severity]}</span>
-          <h3>${signal.name}</h3>
-          <p class="current">当前：${signal.current}</p>
-          <p>${signal.why}</p>
-          <p><strong>动作：</strong>${signal.action}</p>
+        <article class="signal-card ${classToken(signal.severity)}">
+          <span class="tag">${escapeHtml(severityLabels[signal.severity])}</span>
+          <h3>${escapeHtml(signal.name)}</h3>
+          <p class="current">当前：${escapeHtml(signal.current)}</p>
+          <p>${escapeHtml(signal.why)}</p>
+          <p><strong>动作：</strong>${escapeHtml(signal.action)}</p>
         </article>
       `
     )
@@ -362,9 +354,9 @@ function renderProtocol() {
     .map(
       (item) => `
         <article class="protocol-item">
-          <strong>${item.period}</strong>
-          <span>${item.cadence}</span>
-          <p>${item.focus}</p>
+          <strong>${escapeHtml(item.period)}</strong>
+          <span>${escapeHtml(item.cadence)}</span>
+          <p>${escapeHtml(item.focus)}</p>
         </article>
       `
     )
@@ -377,11 +369,11 @@ function renderSources() {
     .map(
       (source) => `
         <tr>
-          <td>${source.priority}</td>
-          <td><strong>${source.org}</strong><br>${source.name}</td>
-          <td>${source.date}</td>
-          <td>${source.useFor}</td>
-          <td><a href="${source.url}" target="_blank" rel="noreferrer">打开</a></td>
+          <td>${escapeHtml(source.priority)}</td>
+          <td><strong>${escapeHtml(source.org)}</strong><br>${escapeHtml(source.name)}</td>
+          <td>${escapeHtml(source.date)}</td>
+          <td>${escapeHtml(source.useFor)}</td>
+          <td><a href="${safeUrl(source.url)}" target="_blank" rel="noreferrer">打开</a></td>
         </tr>
       `
     )

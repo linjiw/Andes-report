@@ -71,9 +71,10 @@
       "parserKey": "ecdc-daily",
       "roles": ["comparison-count", "regional-risk", "travel-anchor"],
       "baseline": {
-        "totalCases": 8,
-        "confirmed": 6,
+        "totalCases": 11,
+        "confirmed": 8,
         "probable": 2,
+        "inconclusive": 1,
         "suspected": 0,
         "deaths": 3
       }
@@ -92,6 +93,19 @@
       "roles": ["background-assessment", "transmission-context"]
     },
     {
+      "id": "ecdc-rapid-advice",
+      "org": "ECDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_rapid_advice",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "Rapid Scientific Advice on the management of passengers - In the context of the Andes virus outbreak on the cruise ship MV Hondius",
+      "canonicalUrl": "https://www.ecdc.europa.eu/en/publications-data/rapid-scientific-advice-management-passengers-context-andes-virus-outbreak-cruise",
+      "roles": ["contact-management", "monitoring-window"]
+    },
+    {
       "id": "cdc-current",
       "org": "CDC",
       "priority": 1,
@@ -104,12 +118,10 @@
       "canonicalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "checkLabel": "CDC current situation",
       "parserKey": "cdc-current",
-      "roles": ["us-risk", "us-cases", "travel-guidance", "symptom-guidance"],
+      "roles": ["us-risk", "us-cases", "response-coordination"],
       "baseline": {
         "riskExtremelyLow": true,
-        "noUsCases": true,
-        "routineTravelNormal": true,
-        "symptoms4to42Days": true
+        "noUsCases": true
       }
     },
     {
@@ -124,6 +136,19 @@
       "name": "Statement on the M/V Hondius Cruise Ship",
       "canonicalUrl": "https://www.cdc.gov/media/releases/2026-hantavirus-confirmed-cruise-ship.html",
       "roles": ["historical-us-statement"]
+    },
+    {
+      "id": "cdc-guidance",
+      "org": "CDC",
+      "priority": 1,
+      "tier": 1,
+      "kind": "official_interim_guidance",
+      "language": "en",
+      "active": true,
+      "pollable": false,
+      "name": "CDC Interim Guidance for Public Health Assessment and Management of People with Potential Exposure to Andes Virus",
+      "canonicalUrl": "https://www.cdc.gov/hantavirus/media/pdfs/2026/05/Andes_virus_guidance_8FINAL.pdf",
+      "roles": ["contact-management", "monitoring-window", "exposure-definition"]
     },
     {
       "id": "cdc-andes",

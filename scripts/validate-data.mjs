@@ -14,9 +14,15 @@ function assert(condition, message) {
 }
 
 assert(data?.meta?.asOf, "meta.asOf is required");
+assert(Array.isArray(data.summary), "summary must be an array");
+assert(Array.isArray(data.stats), "stats must be an array");
+assert(Array.isArray(data.riskRatings), "riskRatings must be an array");
 assert(Array.isArray(data.sources), "sources must be an array");
 assert(Array.isArray(data.events), "events must be an array");
 assert(Array.isArray(data.sourceSnapshots), "sourceSnapshots must be an array");
+assert(Array.isArray(data.monitoringWindows), "monitoringWindows must be an array");
+assert(Array.isArray(data.signals), "signals must be an array");
+assert(Array.isArray(data.updateProtocol), "updateProtocol must be an array");
 
 const sourceMap = new Map(data.sources.map((source) => [source.id, source]));
 const sourceIds = new Set(sourceMap.keys());
@@ -26,6 +32,13 @@ function checkIds(ids = [], path) {
   for (const id of ids) {
     assert(sourceIds.has(id), `${path} references missing sourceId: ${id}`);
   }
+}
+
+function sameRoleSet(left, right) {
+  if (!Array.isArray(left) || !Array.isArray(right)) return false;
+  if (left.length !== right.length) return false;
+  const leftSet = new Set(left);
+  return leftSet.size === right.length && right.every((value) => leftSet.has(value));
 }
 
 data.stats.forEach((item, index) => checkIds(item.sourceIds, `stats[${index}]`));
@@ -62,6 +75,10 @@ for (const source of data.sources) {
   );
   assert(source.name === registrySource.name, `data.sources ${source.id} name drift`);
   assert(source.url === registrySource.canonicalUrl, `data.sources ${source.id} url drift`);
+  assert(source.active === registrySource.active, `data.sources ${source.id} active drift`);
+  assert(Array.isArray(source.roles), `data.sources ${source.id} roles must be an array`);
+  assert(Array.isArray(registrySource.roles), `source-registry.json ${source.id} roles must be an array`);
+  assert(sameRoleSet(source.roles, registrySource.roles), `data.sources ${source.id} roles drift`);
 }
 
 for (const [index, snapshot] of data.sourceSnapshots.entries()) {
