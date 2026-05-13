@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-12T14:35:22.385Z",
+  "generatedAt": "2026-05-13T14:35:51.097Z",
   "latest": {
-    "checkedAt": "2026-05-12T13:02:07.728Z",
+    "checkedAt": "2026-05-13T07:24:47.409Z",
     "status": {
       "fetchErrors": 0,
       "parserBlanks": 0,
@@ -71,13 +71,13 @@
             "usPublicExtremelyLow": true
           },
           "travel": {
-            "routineTravelNormal": true
+            "routineTravelNormal": false
           },
           "monitoring": {
-            "symptoms4to42Days": true
+            "symptoms4to42Days": false
           },
           "cases": {
-            "noUsOutbreakLinkedCases": true
+            "noUsOutbreakLinkedCases": false
           }
         }
       }
@@ -91,7 +91,7 @@
   },
   "warningPatterns": {
     "recentRuns": 5,
-    "parserBlankRuns": 4,
+    "parserBlankRuns": 1,
     "fetchErrorRuns": 0,
     "humanReviewRuns": 5
   },
