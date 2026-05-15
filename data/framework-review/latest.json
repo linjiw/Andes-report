@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-14T14:33:49.176Z",
+  "generatedAt": "2026-05-15T14:30:57.078Z",
   "latest": {
-    "checkedAt": "2026-05-14T12:58:51.626Z",
+    "checkedAt": "2026-05-15T12:59:11.747Z",
     "status": {
       "fetchErrors": 0,
       "parserBlanks": 0,
@@ -58,10 +58,10 @@
             "deaths": 3
           },
           "risk": {
-            "regionalVeryLow": true
+            "regionalVeryLow": false
           },
           "travel": {
-            "tenerifeMay10": true
+            "tenerifeMay10": false
           }
         }
       },

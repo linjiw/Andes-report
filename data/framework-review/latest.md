@@ -1,7 +1,7 @@
 # Andes framework review
 
-Generated at: 2026-05-14T14:33:49.176Z
-Latest official check: 2026-05-14T12:58:51.626Z
+Generated at: 2026-05-15T14:30:57.078Z
+Latest official check: 2026-05-15T12:59:11.747Z
 
 ## Dashboard sync
 
@@ -21,7 +21,7 @@ Latest official check: 2026-05-14T12:58:51.626Z
 
 - WHO Disease Outbreak News latest: `{"caseCounts":{"total":8,"confirmed":6,"probable":2,"inconclusive":null,"suspected":0,"deaths":3},"risk":{"globalLow":true,"shipModerate":true},"transmission":{"onboardHumanToHumanEvidence":true}}`
 - WHO response update, historical: `{"caseCounts":{"total":8,"confirmed":5,"deaths":3},"risk":{"globalLow":true}}`
-- ECDC daily update: `{"caseCounts":{"total":11,"confirmed":8,"probable":2,"inconclusive":1,"suspected":0,"deaths":3},"risk":{"regionalVeryLow":true},"travel":{"tenerifeMay10":true}}`
+- ECDC daily update: `{"caseCounts":{"total":11,"confirmed":8,"probable":2,"inconclusive":1,"suspected":0,"deaths":3},"risk":{"regionalVeryLow":false},"travel":{"tenerifeMay10":false}}`
 - CDC current situation: `{"risk":{"usPublicExtremelyLow":true},"cases":{"noUsOutbreakLinkedCases":true}}`
 
 ## Warning patterns
