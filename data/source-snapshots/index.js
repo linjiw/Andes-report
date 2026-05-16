@@ -1,8 +1,21 @@
 window.SOURCE_SNAPSHOT_INDEX = {
   "schemaVersion": 2,
-  "updatedAt": "2026-05-15T18:53:10.428Z",
-  "lastCheckedAt": "2026-05-15T18:53:10.428Z",
+  "updatedAt": "2026-05-16T01:10:07.563Z",
+  "lastCheckedAt": "2026-05-16T01:10:07.563Z",
   "snapshots": [
+    {
+      "checkedAt": "2026-05-16T01:10:07.563Z",
+      "path": "data/source-snapshots/2026-05-16T01-10-07-563Z.json",
+      "draftPath": "data/update-drafts/2026-05-16T01-10-07-563Z.md",
+      "warnings": 0,
+      "humanReviewRequired": true,
+      "officialRiskStillLow": false,
+      "sourceDisagreement": true,
+      "snapshotReady": true,
+      "statusPublished": true,
+      "fetchErrors": 0,
+      "parserBlanks": 0
+    },
     {
       "checkedAt": "2026-05-15T18:53:10.428Z",
       "path": "data/source-snapshots/2026-05-15T18-53-10-428Z.json",
