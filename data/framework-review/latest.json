@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-16T14:11:16.997Z",
+  "generatedAt": "2026-05-17T14:12:00.739Z",
   "latest": {
-    "checkedAt": "2026-05-16T12:41:45.777Z",
+    "checkedAt": "2026-05-17T12:38:42.535Z",
     "status": {
       "fetchErrors": 0,
       "parserBlanks": 0,
@@ -50,8 +50,8 @@
         "label": "ECDC daily update",
         "facts": {
           "caseCounts": {
-            "total": 11,
-            "confirmed": 8,
+            "total": 12,
+            "confirmed": 9,
             "probable": 2,
             "inconclusive": 1,
             "suspected": 0,
@@ -81,9 +81,9 @@
   },
   "dashboardSync": {
     "whoAligned": true,
-    "ecdcAligned": true,
+    "ecdcAligned": false,
     "cdcAligned": true,
-    "overallAligned": true
+    "overallAligned": false
   },
   "warningPatterns": {
     "recentRuns": 5,
@@ -97,6 +97,7 @@
     "pollableMissingFromLatest": []
   },
   "recommendations": [
+    "Curated dashboard is not fully aligned with the latest successful official check.",
     "Human review is still required for the latest official check before treating narrative/risk interpretation as settled."
   ]
 }

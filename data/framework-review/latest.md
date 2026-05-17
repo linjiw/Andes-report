@@ -1,13 +1,13 @@
 # Andes framework review
 
-Generated at: 2026-05-16T14:11:16.997Z
-Latest official check: 2026-05-16T12:41:45.777Z
+Generated at: 2026-05-17T14:12:00.739Z
+Latest official check: 2026-05-17T12:38:42.535Z
 
 ## Dashboard sync
 
-- Overall aligned: true
+- Overall aligned: false
 - WHO aligned: true
-- ECDC aligned: true
+- ECDC aligned: false
 - CDC aligned: true
 
 ## Latest status
@@ -21,7 +21,7 @@ Latest official check: 2026-05-16T12:41:45.777Z
 
 - WHO Disease Outbreak News latest: `{"caseCounts":{"total":8,"confirmed":6,"probable":2,"inconclusive":null,"suspected":0,"deaths":3},"risk":{"globalLow":true,"shipModerate":true},"transmission":{"onboardHumanToHumanEvidence":true}}`
 - WHO response update, historical: `{"caseCounts":{"total":8,"confirmed":5,"deaths":3},"risk":{"globalLow":true}}`
-- ECDC daily update: `{"caseCounts":{"total":11,"confirmed":8,"probable":2,"inconclusive":1,"suspected":0,"deaths":3},"risk":{"regionalVeryLow":false},"travel":{"tenerifeMay10":false}}`
+- ECDC daily update: `{"caseCounts":{"total":12,"confirmed":9,"probable":2,"inconclusive":1,"suspected":0,"deaths":3},"risk":{"regionalVeryLow":false},"travel":{"tenerifeMay10":false}}`
 - CDC current situation: `{"risk":{"usPublicExtremelyLow":true},"cases":{"noUsOutbreakLinkedCases":true}}`
 
 ## Warning patterns
@@ -39,5 +39,6 @@ Latest official check: 2026-05-16T12:41:45.777Z
 
 ## Recommendations
 
+- Curated dashboard is not fully aligned with the latest successful official check.
 - Human review is still required for the latest official check before treating narrative/risk interpretation as settled.
 
