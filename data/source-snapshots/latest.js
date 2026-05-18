@@ -1,6 +1,6 @@
 window.LATEST_SOURCE_SNAPSHOT = {
   "schemaVersion": 2,
-  "checkedAt": "2026-05-17T18:40:20.458Z",
+  "checkedAt": "2026-05-18T01:20:41.200Z",
   "results": [
     {
       "id": "who-don",
@@ -11,7 +11,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-17T18:40:20.991Z",
+      "fetchedAt": "2026-05-18T01:20:41.633Z",
       "parserKey": "who-don",
       "parserVersion": 1,
       "contentHash": "3f7746d6c73ae5004e82f775a62c30e6b6df8cea0d1868fb87b1c4ee6a7de32a",
@@ -61,7 +61,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-17T18:40:21.026Z",
+      "fetchedAt": "2026-05-18T01:20:41.672Z",
       "parserKey": "who-response",
       "parserVersion": 1,
       "contentHash": "4df5171c9e25ad3a28fd634954c0be6143eae546530c96170b34e58e337b372b",
@@ -98,7 +98,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-17T18:40:21.463Z",
+      "fetchedAt": "2026-05-18T01:20:42.028Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
       "contentHash": "724c140a8b991339710b33de7f72f58bcb20ac3900d8303f084638c2e95fa481",
@@ -147,7 +147,7 @@ window.LATEST_SOURCE_SNAPSHOT = {
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-17T18:40:21.520Z",
+      "fetchedAt": "2026-05-18T01:20:42.056Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
       "contentHash": "b9a725499f5d4e80707f7a7fdc0ba2b884edaddeb1897a81cb5327ba94980ee1",
