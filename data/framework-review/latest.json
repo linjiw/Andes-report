@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-18T14:45:01.112Z",
+  "generatedAt": "2026-05-19T14:37:32.830Z",
   "latest": {
-    "checkedAt": "2026-05-18T13:37:03.542Z",
+    "checkedAt": "2026-05-19T07:33:16.517Z",
     "status": {
       "fetchErrors": 0,
       "parserBlanks": 0,
@@ -87,7 +87,7 @@
   },
   "warningPatterns": {
     "recentRuns": 5,
-    "parserBlankRuns": 0,
+    "parserBlankRuns": 1,
     "fetchErrorRuns": 0,
     "humanReviewRuns": 5
   },
@@ -98,6 +98,7 @@
   },
   "recommendations": [
     "Curated dashboard is not fully aligned with the latest successful official check.",
-    "Human review is still required for the latest official check before treating narrative/risk interpretation as settled."
+    "Human review is still required for the latest official check before treating narrative/risk interpretation as settled.",
+    "Review repeated parser/fetch failures and adjust source parsers or fallback handling."
   ]
 }

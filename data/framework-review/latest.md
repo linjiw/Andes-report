@@ -1,7 +1,7 @@
 # Andes framework review
 
-Generated at: 2026-05-18T14:45:01.112Z
-Latest official check: 2026-05-18T13:37:03.542Z
+Generated at: 2026-05-19T14:37:32.830Z
+Latest official check: 2026-05-19T07:33:16.517Z
 
 ## Dashboard sync
 
@@ -27,7 +27,7 @@ Latest official check: 2026-05-18T13:37:03.542Z
 ## Warning patterns
 
 - Recent runs reviewed: 5
-- Runs with parser blanks: 0
+- Runs with parser blanks: 1
 - Runs with fetch errors: 0
 - Runs requiring human review: 5
 
@@ -41,4 +41,5 @@ Latest official check: 2026-05-18T13:37:03.542Z
 
 - Curated dashboard is not fully aligned with the latest successful official check.
 - Human review is still required for the latest official check before treating narrative/risk interpretation as settled.
+- Review repeated parser/fetch failures and adjust source parsers or fallback handling.
 
