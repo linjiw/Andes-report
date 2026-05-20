@@ -1,6 +1,6 @@
 # Andes framework review
 
-Generated at: 2026-05-19T14:37:32.830Z
+Generated at: 2026-05-20T14:37:44.497Z
 Latest official check: 2026-05-19T07:33:16.517Z
 
 ## Dashboard sync
@@ -27,7 +27,7 @@ Latest official check: 2026-05-19T07:33:16.517Z
 ## Warning patterns
 
 - Recent runs reviewed: 5
-- Runs with parser blanks: 1
+- Runs with parser blanks: 5
 - Runs with fetch errors: 0
 - Runs requiring human review: 5
 
