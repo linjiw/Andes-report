@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-05-13T13:04:59.723Z",
+  "checkedAt": "2026-05-26T01:18:13.828Z",
   "results": [
     {
       "id": "who-don",
@@ -11,11 +11,11 @@
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-13T13:05:00.099Z",
+      "fetchedAt": "2026-05-26T01:18:14.068Z",
       "parserKey": "who-don",
       "parserVersion": 1,
-      "contentHash": "c1db0daf65f410585235d19a22121e2af0a326e8e128faceff6c8eeacc41f520",
-      "fetchedTextLength": 31662,
+      "contentHash": "3f7746d6c73ae5004e82f775a62c30e6b6df8cea0d1868fb87b1c4ee6a7de32a",
+      "fetchedTextLength": 31716,
       "parsed": {
         "totalCases": 8,
         "confirmed": 6,
@@ -32,6 +32,7 @@
           "total": 8,
           "confirmed": 6,
           "probable": 2,
+          "inconclusive": null,
           "suspected": 0,
           "deaths": 3
         },
@@ -60,7 +61,7 @@
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-13T13:05:00.153Z",
+      "fetchedAt": "2026-05-26T01:18:14.102Z",
       "parserKey": "who-response",
       "parserVersion": 1,
       "contentHash": "4df5171c9e25ad3a28fd634954c0be6143eae546530c96170b34e58e337b372b",
@@ -97,39 +98,42 @@
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-13T13:05:00.396Z",
+      "fetchedAt": "2026-05-26T01:18:14.549Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
-      "contentHash": "b4d0a4e2cfeef75317f45131a1abf7b47bd66483331b025a7f2598638af3bbe5",
-      "fetchedTextLength": 5490,
+      "contentHash": "853c6a9b58a04ce6e1ff90677857bc0b081b6c4b60d868a03a09234efa7c0b8e",
+      "fetchedTextLength": 5848,
       "parsed": {
-        "totalCases": null,
-        "confirmed": 8,
+        "totalCases": 12,
+        "confirmed": 10,
         "probable": 2,
+        "inconclusive": null,
         "suspected": 0,
         "deaths": 3,
-        "riskVeryLow": true,
-        "tenerifeMay10": true
+        "riskVeryLow": false,
+        "tenerifeMay10": false
       },
       "facts": {
         "caseCounts": {
-          "total": null,
-          "confirmed": 8,
+          "total": 12,
+          "confirmed": 10,
           "probable": 2,
+          "inconclusive": null,
           "suspected": 0,
           "deaths": 3
         },
         "risk": {
-          "regionalVeryLow": true
+          "regionalVeryLow": false
         },
         "travel": {
-          "tenerifeMay10": true
+          "tenerifeMay10": false
         }
       },
       "baseline": {
-        "totalCases": 8,
-        "confirmed": 6,
+        "totalCases": 11,
+        "confirmed": 8,
         "probable": 2,
+        "inconclusive": 1,
         "suspected": 0,
         "deaths": 3
       }
@@ -143,14 +147,14 @@
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-05-13T13:05:00.420Z",
+      "fetchedAt": "2026-05-26T01:18:14.582Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "ca89b442f575612aaef1dbcf036f1ca3ade4837e81109171f2fefee32f7e6f1f",
-      "fetchedTextLength": 5773,
+      "contentHash": "3251b9d7a2feb5c6aae18fb95850a9f4f50ba52d317ab53a16dcbebdb18264ad",
+      "fetchedTextLength": 6768,
       "parsed": {
         "riskExtremelyLow": true,
-        "noUsCases": false,
+        "noUsCases": true,
         "routineTravelNormal": false,
         "symptoms4to42Days": false
       },
@@ -158,27 +162,19 @@
         "risk": {
           "usPublicExtremelyLow": true
         },
-        "travel": {
-          "routineTravelNormal": false
-        },
-        "monitoring": {
-          "symptoms4to42Days": false
-        },
         "cases": {
-          "noUsOutbreakLinkedCases": false
+          "noUsOutbreakLinkedCases": true
         }
       },
       "baseline": {
         "riskExtremelyLow": true,
-        "noUsCases": true,
-        "routineTravelNormal": true,
-        "symptoms4to42Days": true
+        "noUsCases": true
       }
     }
   ],
   "signals": {
-    "officialRiskStillLow": true,
-    "cdcNoUsCases": false,
+    "officialRiskStillLow": false,
+    "cdcNoUsCases": true,
     "whoShipRiskModerate": true,
     "whoOnboardHumanToHumanEvidence": true,
     "sourceDisagreement": true,
@@ -187,46 +183,28 @@
         "sourceId": "ecdc-daily",
         "sourceLabel": "ECDC daily update",
         "key": "totalCases",
-        "expected": 8,
-        "observed": null,
-        "type": "parser-blank",
-        "message": "totalCases: baseline 8, parser returned blank"
+        "expected": 11,
+        "observed": 12,
+        "type": "baseline-change",
+        "message": "totalCases: baseline 11, page 12"
       },
       {
         "sourceId": "ecdc-daily",
         "sourceLabel": "ECDC daily update",
         "key": "confirmed",
-        "expected": 6,
-        "observed": 8,
+        "expected": 8,
+        "observed": 10,
         "type": "baseline-change",
-        "message": "confirmed: baseline 6, page 8"
+        "message": "confirmed: baseline 8, page 10"
       },
       {
-        "sourceId": "cdc-current",
-        "sourceLabel": "CDC current situation",
-        "key": "noUsCases",
-        "expected": true,
-        "observed": false,
-        "type": "baseline-change",
-        "message": "noUsCases: baseline true, page false"
-      },
-      {
-        "sourceId": "cdc-current",
-        "sourceLabel": "CDC current situation",
-        "key": "routineTravelNormal",
-        "expected": true,
-        "observed": false,
-        "type": "baseline-change",
-        "message": "routineTravelNormal: baseline true, page false"
-      },
-      {
-        "sourceId": "cdc-current",
-        "sourceLabel": "CDC current situation",
-        "key": "symptoms4to42Days",
-        "expected": true,
-        "observed": false,
-        "type": "baseline-change",
-        "message": "symptoms4to42Days: baseline true, page false"
+        "sourceId": "ecdc-daily",
+        "sourceLabel": "ECDC daily update",
+        "key": "inconclusive",
+        "expected": 1,
+        "observed": null,
+        "type": "parser-blank",
+        "message": "inconclusive: baseline 1, parser returned blank"
       }
     ],
     "humanReviewRequired": true
