@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-06-25T01:20:03.967Z",
+  "checkedAt": "2026-07-07T15:18:54.339Z",
   "results": [
     {
       "id": "who-don",
@@ -11,11 +11,11 @@
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-06-25T01:20:04.564Z",
+      "fetchedAt": "2026-07-07T15:18:54.828Z",
       "parserKey": "who-don",
       "parserVersion": 1,
-      "contentHash": "3f7746d6c73ae5004e82f775a62c30e6b6df8cea0d1868fb87b1c4ee6a7de32a",
-      "fetchedTextLength": 31716,
+      "contentHash": "97e20701b99f38c3c045ac26345eb4ad75be082649077f530f180379bcd4aef2",
+      "fetchedTextLength": 31687,
       "parsed": {
         "totalCases": 8,
         "confirmed": 6,
@@ -61,11 +61,11 @@
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-06-25T01:20:04.617Z",
+      "fetchedAt": "2026-07-07T15:18:54.854Z",
       "parserKey": "who-response",
       "parserVersion": 1,
-      "contentHash": "25f5cb32a6c7faa212c07d6e88739151477fc3d13db37559dccab5eccf94328a",
-      "fetchedTextLength": 5278,
+      "contentHash": "4279629a9311b41729e38177a1051763de856d9e80be9bace0347f50e6afcc79",
+      "fetchedTextLength": 5197,
       "parsed": {
         "totalCases": 8,
         "confirmed": 5,
@@ -98,11 +98,11 @@
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-06-25T01:20:09.769Z",
+      "fetchedAt": "2026-07-07T15:18:55.282Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
-      "contentHash": "d0d8231a61235074d392f9a0df5db7fa752e105ad271309e4dd2eec9f486a584",
-      "fetchedTextLength": 6279,
+      "contentHash": "2bf7c4640ed746fb3a94973d32ee1af7c24af056016e100c083cffde298b2bd9",
+      "fetchedTextLength": 6261,
       "parsed": {
         "totalCases": 13,
         "confirmed": 12,
@@ -145,25 +145,25 @@
       "tier": 1,
       "url": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
-      "ok": true,
-      "status": 200,
-      "fetchedAt": "2026-06-25T01:20:09.895Z",
+      "ok": false,
+      "status": 404,
+      "fetchedAt": "2026-07-07T15:18:55.306Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "b54aa2ce01fa1e2ac706b5441dc140ef8364e0b24239393a8ad9373c99874325",
-      "fetchedTextLength": 7488,
+      "contentHash": "7aa9d2678579e6f8c6c10f496380358912cdddafde6b0e432c8ace47316d27ba",
+      "fetchedTextLength": 1763,
       "parsed": {
-        "riskExtremelyLow": true,
-        "noUsCases": true,
+        "riskExtremelyLow": false,
+        "noUsCases": false,
         "routineTravelNormal": false,
         "symptoms4to42Days": false
       },
       "facts": {
         "risk": {
-          "usPublicExtremelyLow": true
+          "usPublicExtremelyLow": false
         },
         "cases": {
-          "noUsOutbreakLinkedCases": true
+          "noUsOutbreakLinkedCases": false
         }
       },
       "baseline": {
@@ -174,7 +174,7 @@
   ],
   "signals": {
     "officialRiskStillLow": false,
-    "cdcNoUsCases": true,
+    "cdcNoUsCases": false,
     "whoShipRiskModerate": true,
     "whoOnboardHumanToHumanEvidence": true,
     "sourceDisagreement": true,
@@ -214,12 +214,30 @@
         "observed": null,
         "type": "parser-blank",
         "message": "inconclusive: baseline 1, parser returned blank"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "riskExtremelyLow",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "riskExtremelyLow: baseline true, page false"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "noUsCases",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "noUsCases: baseline true, page false"
       }
     ],
     "humanReviewRequired": true
   },
   "status": {
-    "fetchErrors": 0,
+    "fetchErrors": 1,
     "parserBlanks": 1,
     "snapshotReady": false,
     "humanReviewRequired": true
