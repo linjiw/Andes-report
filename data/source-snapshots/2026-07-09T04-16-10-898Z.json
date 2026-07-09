@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-06-26T13:02:06.479Z",
+  "checkedAt": "2026-07-09T04:16:10.898Z",
   "results": [
     {
       "id": "who-don",
@@ -11,11 +11,11 @@
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-06-26T13:02:06.782Z",
+      "fetchedAt": "2026-07-09T04:16:11.444Z",
       "parserKey": "who-don",
       "parserVersion": 1,
-      "contentHash": "795ea529874e9aa8f8d4dcbcc33ec1e59e3f1605c0bccd654840759c6050e085",
-      "fetchedTextLength": 31691,
+      "contentHash": "97e20701b99f38c3c045ac26345eb4ad75be082649077f530f180379bcd4aef2",
+      "fetchedTextLength": 31687,
       "parsed": {
         "totalCases": 8,
         "confirmed": 6,
@@ -61,11 +61,11 @@
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-06-26T13:02:06.820Z",
+      "fetchedAt": "2026-07-09T04:16:11.475Z",
       "parserKey": "who-response",
       "parserVersion": 1,
-      "contentHash": "4df5171c9e25ad3a28fd634954c0be6143eae546530c96170b34e58e337b372b",
-      "fetchedTextLength": 5226,
+      "contentHash": "4279629a9311b41729e38177a1051763de856d9e80be9bace0347f50e6afcc79",
+      "fetchedTextLength": 5197,
       "parsed": {
         "totalCases": 8,
         "confirmed": 5,
@@ -98,7 +98,7 @@
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-06-26T13:02:07.084Z",
+      "fetchedAt": "2026-07-09T04:16:12.006Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
       "contentHash": "2bf7c4640ed746fb3a94973d32ee1af7c24af056016e100c083cffde298b2bd9",
@@ -145,25 +145,25 @@
       "tier": 1,
       "url": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
-      "ok": true,
-      "status": 200,
-      "fetchedAt": "2026-06-26T13:02:07.709Z",
+      "ok": false,
+      "status": 403,
+      "fetchedAt": "2026-07-09T04:16:12.039Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "b54aa2ce01fa1e2ac706b5441dc140ef8364e0b24239393a8ad9373c99874325",
-      "fetchedTextLength": 7488,
+      "contentHash": "f770b8631fc97d59d7b3ae8e881633ddcf066d0c91fa254ca6d5fec9c53f3d36",
+      "fetchedTextLength": 340,
       "parsed": {
-        "riskExtremelyLow": true,
-        "noUsCases": true,
+        "riskExtremelyLow": false,
+        "noUsCases": false,
         "routineTravelNormal": false,
         "symptoms4to42Days": false
       },
       "facts": {
         "risk": {
-          "usPublicExtremelyLow": true
+          "usPublicExtremelyLow": false
         },
         "cases": {
-          "noUsOutbreakLinkedCases": true
+          "noUsOutbreakLinkedCases": false
         }
       },
       "baseline": {
@@ -174,7 +174,7 @@
   ],
   "signals": {
     "officialRiskStillLow": false,
-    "cdcNoUsCases": true,
+    "cdcNoUsCases": false,
     "whoShipRiskModerate": true,
     "whoOnboardHumanToHumanEvidence": true,
     "sourceDisagreement": true,
@@ -214,12 +214,30 @@
         "observed": null,
         "type": "parser-blank",
         "message": "inconclusive: baseline 1, parser returned blank"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "riskExtremelyLow",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "riskExtremelyLow: baseline true, page false"
+      },
+      {
+        "sourceId": "cdc-current",
+        "sourceLabel": "CDC current situation",
+        "key": "noUsCases",
+        "expected": true,
+        "observed": false,
+        "type": "baseline-change",
+        "message": "noUsCases: baseline true, page false"
       }
     ],
     "humanReviewRequired": true
   },
   "status": {
-    "fetchErrors": 0,
+    "fetchErrors": 1,
     "parserBlanks": 1,
     "snapshotReady": false,
     "humanReviewRequired": true
