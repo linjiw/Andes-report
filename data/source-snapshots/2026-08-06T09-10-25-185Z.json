@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-07-24T19:50:01.376Z",
+  "checkedAt": "2026-08-06T09:10:25.185Z",
   "results": [
     {
       "id": "who-don",
@@ -11,11 +11,11 @@
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-07-24T19:50:01.882Z",
+      "fetchedAt": "2026-08-06T09:10:25.483Z",
       "parserKey": "who-don",
       "parserVersion": 1,
-      "contentHash": "73513495bea0bd56d5ef1aa67cc7a81409e06b496a72903f3f31b7f0254d4fc3",
-      "fetchedTextLength": 31739,
+      "contentHash": "97e20701b99f38c3c045ac26345eb4ad75be082649077f530f180379bcd4aef2",
+      "fetchedTextLength": 31687,
       "parsed": {
         "totalCases": 8,
         "confirmed": 6,
@@ -61,11 +61,11 @@
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-07-24T19:50:01.918Z",
+      "fetchedAt": "2026-08-06T09:10:25.512Z",
       "parserKey": "who-response",
       "parserVersion": 1,
-      "contentHash": "128eed0f895159956315569e2948555f97c558a2dbf5d047ccce654564181604",
-      "fetchedTextLength": 5249,
+      "contentHash": "4279629a9311b41729e38177a1051763de856d9e80be9bace0347f50e6afcc79",
+      "fetchedTextLength": 5197,
       "parsed": {
         "totalCases": 8,
         "confirmed": 5,
@@ -98,10 +98,10 @@
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-07-24T19:50:02.467Z",
+      "fetchedAt": "2026-08-06T09:10:25.581Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
-      "contentHash": "cb6de44b3967dd9b5bfe3c280a0b12118932011346b056a8e8eb170759a185d6",
+      "contentHash": "053c9441d8016725f82a9c6cf16a93ea05b64d7b6fb7f8ee67687db70a9ac674",
       "fetchedTextLength": 6288,
       "parsed": {
         "totalCases": 13,
@@ -147,10 +147,10 @@
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "ok": false,
       "status": 403,
-      "fetchedAt": "2026-07-24T19:50:02.528Z",
+      "fetchedAt": "2026-08-06T09:10:25.646Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "7cba954d209b884cbca689ef609841cc99fb8e0bd01c883c9554456d30b14ece",
+      "contentHash": "fb18a4c4ce02e0b1d40633399bce45c270dbadd577478fd454fda016a099369e",
       "fetchedTextLength": 340,
       "parsed": {
         "riskExtremelyLow": false,
