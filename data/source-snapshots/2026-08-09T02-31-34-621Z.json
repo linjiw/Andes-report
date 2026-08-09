@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-07-27T10:11:53.708Z",
+  "checkedAt": "2026-08-09T02:31:34.621Z",
   "results": [
     {
       "id": "who-don",
@@ -11,7 +11,7 @@
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-07-27T10:11:54.263Z",
+      "fetchedAt": "2026-08-09T02:31:35.419Z",
       "parserKey": "who-don",
       "parserVersion": 1,
       "contentHash": "97e20701b99f38c3c045ac26345eb4ad75be082649077f530f180379bcd4aef2",
@@ -61,11 +61,11 @@
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-07-27T10:11:54.295Z",
+      "fetchedAt": "2026-08-09T02:31:35.467Z",
       "parserKey": "who-response",
       "parserVersion": 1,
-      "contentHash": "128eed0f895159956315569e2948555f97c558a2dbf5d047ccce654564181604",
-      "fetchedTextLength": 5249,
+      "contentHash": "4279629a9311b41729e38177a1051763de856d9e80be9bace0347f50e6afcc79",
+      "fetchedTextLength": 5197,
       "parsed": {
         "totalCases": 8,
         "confirmed": 5,
@@ -98,10 +98,10 @@
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-07-27T10:11:54.524Z",
+      "fetchedAt": "2026-08-09T02:31:36.152Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
-      "contentHash": "cb6de44b3967dd9b5bfe3c280a0b12118932011346b056a8e8eb170759a185d6",
+      "contentHash": "053c9441d8016725f82a9c6cf16a93ea05b64d7b6fb7f8ee67687db70a9ac674",
       "fetchedTextLength": 6288,
       "parsed": {
         "totalCases": 13,
@@ -147,10 +147,10 @@
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "ok": false,
       "status": 403,
-      "fetchedAt": "2026-07-27T10:11:54.594Z",
+      "fetchedAt": "2026-08-09T02:31:36.268Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "4f73d0c45c5557786d2dc1647d7f4db4beacb8a4dc862483209e9aaf791d03e3",
+      "contentHash": "82728ce6ec6dc723af342835a2e47fe7d370e8ced656053cb91b7178907f4c80",
       "fetchedTextLength": 340,
       "parsed": {
         "riskExtremelyLow": false,
