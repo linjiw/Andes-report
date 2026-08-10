@@ -1,8 +1,21 @@
 {
   "schemaVersion": 2,
   "updatedAt": "2026-05-19T07:33:16.517Z",
-  "lastCheckedAt": "2026-08-10T08:08:00.892Z",
+  "lastCheckedAt": "2026-08-10T13:48:09.024Z",
   "snapshots": [
+    {
+      "checkedAt": "2026-08-10T13:48:09.024Z",
+      "path": "data/source-snapshots/2026-08-10T13-48-09-024Z.json",
+      "draftPath": "data/update-drafts/2026-08-10T13-48-09-024Z.md",
+      "warnings": 6,
+      "humanReviewRequired": true,
+      "officialRiskStillLow": false,
+      "sourceDisagreement": true,
+      "snapshotReady": false,
+      "statusPublished": false,
+      "fetchErrors": 1,
+      "parserBlanks": 1
+    },
     {
       "checkedAt": "2026-08-10T08:08:00.892Z",
       "path": "data/source-snapshots/2026-08-10T08-08-00-892Z.json",
@@ -631,19 +644,6 @@
       "checkedAt": "2026-07-29T03:44:15.974Z",
       "path": "data/source-snapshots/2026-07-29T03-44-15-974Z.json",
       "draftPath": "data/update-drafts/2026-07-29T03-44-15-974Z.md",
-      "warnings": 6,
-      "humanReviewRequired": true,
-      "officialRiskStillLow": false,
-      "sourceDisagreement": true,
-      "snapshotReady": false,
-      "statusPublished": false,
-      "fetchErrors": 1,
-      "parserBlanks": 1
-    },
-    {
-      "checkedAt": "2026-07-28T19:55:20.838Z",
-      "path": "data/source-snapshots/2026-07-28T19-55-20-838Z.json",
-      "draftPath": "data/update-drafts/2026-07-28T19-55-20-838Z.md",
       "warnings": 6,
       "humanReviewRequired": true,
       "officialRiskStillLow": false,
