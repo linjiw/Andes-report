@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "checkedAt": "2026-08-04T14:42:59.110Z",
+  "checkedAt": "2026-08-17T07:25:33.340Z",
   "results": [
     {
       "id": "who-don",
@@ -11,11 +11,11 @@
       "finalUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-08-04T14:42:59.384Z",
+      "fetchedAt": "2026-08-17T07:25:33.807Z",
       "parserKey": "who-don",
       "parserVersion": 1,
-      "contentHash": "b5334ec9505f22f641177fb65a2ffe7bc14974ab0206e6d7ff82cf91ce3826d1",
-      "fetchedTextLength": 31610,
+      "contentHash": "97e20701b99f38c3c045ac26345eb4ad75be082649077f530f180379bcd4aef2",
+      "fetchedTextLength": 31687,
       "parsed": {
         "totalCases": 8,
         "confirmed": 6,
@@ -61,7 +61,7 @@
       "finalUrl": "https://www.who.int/news/item/07-05-2026-who-s-response-to-hantavirus-cases-linked-to-a-cruise-ship",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-08-04T14:42:59.588Z",
+      "fetchedAt": "2026-08-17T07:25:33.845Z",
       "parserKey": "who-response",
       "parserVersion": 1,
       "contentHash": "4279629a9311b41729e38177a1051763de856d9e80be9bace0347f50e6afcc79",
@@ -98,7 +98,7 @@
       "finalUrl": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
       "ok": true,
       "status": 200,
-      "fetchedAt": "2026-08-04T14:43:00.385Z",
+      "fetchedAt": "2026-08-17T07:25:34.139Z",
       "parserKey": "ecdc-daily",
       "parserVersion": 1,
       "contentHash": "053c9441d8016725f82a9c6cf16a93ea05b64d7b6fb7f8ee67687db70a9ac674",
@@ -147,10 +147,10 @@
       "finalUrl": "https://www.cdc.gov/hantavirus/situation-summary/index.html",
       "ok": false,
       "status": 403,
-      "fetchedAt": "2026-08-04T14:43:00.473Z",
+      "fetchedAt": "2026-08-17T07:25:34.217Z",
       "parserKey": "cdc-current",
       "parserVersion": 1,
-      "contentHash": "c680ec3ae61a354dd3cbc737dfefcc90dcd330883ce2567f16017e1f188a01a7",
+      "contentHash": "13907f833dd841749dff96798dd8583497822191b34a996666bb222d3037ac0e",
       "fetchedTextLength": 340,
       "parsed": {
         "riskExtremelyLow": false,
