@@ -1,8 +1,21 @@
 window.SOURCE_SNAPSHOT_INDEX = {
   "schemaVersion": 2,
   "updatedAt": "2026-05-19T07:33:16.517Z",
-  "lastCheckedAt": "2026-10-14T21:47:02.425Z",
+  "lastCheckedAt": "2026-10-15T04:50:37.817Z",
   "snapshots": [
+    {
+      "checkedAt": "2026-10-15T04:50:37.817Z",
+      "path": "data/source-snapshots/2026-10-15T04-50-37-817Z.json",
+      "draftPath": "data/update-drafts/2026-10-15T04-50-37-817Z.md",
+      "warnings": 6,
+      "humanReviewRequired": true,
+      "officialRiskStillLow": false,
+      "sourceDisagreement": true,
+      "snapshotReady": false,
+      "statusPublished": false,
+      "fetchErrors": 1,
+      "parserBlanks": 1
+    },
     {
       "checkedAt": "2026-10-14T21:47:02.425Z",
       "path": "data/source-snapshots/2026-10-14T21-47-02-425Z.json",
@@ -631,19 +644,6 @@ window.SOURCE_SNAPSHOT_INDEX = {
       "checkedAt": "2026-09-28T14:08:23.430Z",
       "path": "data/source-snapshots/2026-09-28T14-08-23-430Z.json",
       "draftPath": "data/update-drafts/2026-09-28T14-08-23-430Z.md",
-      "warnings": 6,
-      "humanReviewRequired": true,
-      "officialRiskStillLow": false,
-      "sourceDisagreement": true,
-      "snapshotReady": false,
-      "statusPublished": false,
-      "fetchErrors": 1,
-      "parserBlanks": 1
-    },
-    {
-      "checkedAt": "2026-09-28T05:32:49.956Z",
-      "path": "data/source-snapshots/2026-09-28T05-32-49-956Z.json",
-      "draftPath": "data/update-drafts/2026-09-28T05-32-49-956Z.md",
       "warnings": 6,
       "humanReviewRequired": true,
       "officialRiskStillLow": false,
