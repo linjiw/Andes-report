@@ -1,6 +1,6 @@
 # Andes framework review
 
-Generated at: 2026-11-16T23:00:36.207Z
+Generated at: 2026-11-17T21:53:37.250Z
 Latest official check: 2026-05-19T07:33:16.517Z
 
 ## Dashboard sync
